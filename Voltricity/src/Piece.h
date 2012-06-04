@@ -1,0 +1,37 @@
+#ifndef Piece_h__
+#define Piece_h__
+
+#include <vector>
+#include "Direction.h"
+#include "PieceFrame.h"
+
+namespace volt {
+
+class PieceType {
+public:
+	enum e {I=0,J=1,L=2,O=3,S=4,T=5,Z=6,count=7};
+};
+
+class Piece {
+
+public:
+	Piece();
+	virtual ~Piece();
+
+	void Render(sf::RenderTarget& target) const;
+	const PieceFrame& GetCurrentFrame() const;
+	void SetPosition(const sf::Vector2f& pixelPos);
+	void AddFrame(PieceFrame frame);
+	void Rotate(game::Direction::e dir);
+
+private:
+	std::vector<PieceFrame> _frames;
+	int _currentFrameIndex;
+
+	void Piece::keepValidFrameIndex();
+
+};
+
+}
+
+#endif // Piece_h__
