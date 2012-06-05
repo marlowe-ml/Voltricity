@@ -38,6 +38,7 @@ public:
 
 private:
 	Piece _currentPiece;
+	Piece _ghostPiece;	// todo: continue
 	sf::Vector2i _currentPieceCellPosition;
 
 	

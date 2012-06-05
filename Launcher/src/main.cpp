@@ -1,6 +1,6 @@
 #include "Voltricity.h"
 
 int main() {
-	volt::Voltricity voltricity	;
+	volt::Voltricity voltricity;
 	voltricity.Run();
 }

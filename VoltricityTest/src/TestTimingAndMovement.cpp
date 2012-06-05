@@ -77,3 +77,16 @@ TEST(CheckStartStop) {
 	CHECK(distance == 3);
 
 }
+
+TEST(PauseResume) {
+	IntervalMove move = IntervalMove(game::Direction::top, 100);
+	move.Start(200);
+
+	move.Pause(300);
+
+	move.Resume(500);
+
+
+	int distance = move.DistanceUnitsSinceLastMove(620);
+	CHECK(distance == 2);
+}

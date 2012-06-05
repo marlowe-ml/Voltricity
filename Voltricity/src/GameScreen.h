@@ -3,9 +3,7 @@
 
 #include "Screen.h"
 #include "Grid.h"
-#include "PieceFactory.h"
-#include "Clock.h"
-#include "IntervalMove.h"
+#include "GameMechanics.h"
 
 namespace volt {
 
@@ -23,26 +21,8 @@ protected:
 	virtual int onInit();
 
 private:
-
-	void spawnNewPiece();
-	void processMoveCommand(game::Direction::e direction);
-	void processRotationCommand(game::Direction::e direction);
-
-	void movePiece(game::Direction::e direction, int units);
-	void hardDrop();
-	void onPieceDropBottom();
-
-	static const game::ClockTick FULL_DROP_INTERVAL;
-
+	GameMechanics _gameMechanics;
 	Grid _grid;
-	PieceFactory _pieceFactory;
-	bool _allowHardDrop;
-
-	IntervalMove _automaticDropMove;
-	IntervalMove _manualDropMove;
-	IntervalMove _horizontalMove;
-	IntervalMove _rotationMove;
-
 };
 
 
