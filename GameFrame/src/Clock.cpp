@@ -50,10 +50,10 @@ ClockSecond::ClockSecond(double seconds) : _seconds(seconds)
 ClockSecond::ClockSecond(ClockTick ticks) : _seconds(static_cast<double>(ticks) / static_cast<double>(Clock::TICKS_PER_SECOND))
 {}
 
-ClockSecond::operator double() {
+ClockSecond::operator double() const {
 	return _seconds;
 }
 
-ClockSecond::operator ClockTick() {
+ClockSecond::operator ClockTick() const {
 	return static_cast<ClockTick>(_seconds * Clock::TICKS_PER_SECOND);
 }

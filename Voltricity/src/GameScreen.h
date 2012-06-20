@@ -2,6 +2,7 @@
 #define GameScreen_h__
 
 #include "Screen.h"
+#include "Label.h"
 #include "Grid.h"
 #include "GameMechanics.h"
 
@@ -23,6 +24,9 @@ protected:
 private:
 	GameMechanics _gameMechanics;
 	Grid _grid;
+
+	game::Label _labelLevel;
+
 };
 
 

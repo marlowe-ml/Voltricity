@@ -1,9 +1,9 @@
 #include "Voltricity.h"
 #include "ScreenFactory.h"
 #include "ScreenManager.h"
+#include "ResourceManager.h"
 #include "Clock.h"
 #include "VoltricityScreenFactory.h"
-#include "boost/scoped_ptr.hpp"
 
 using namespace volt;
 using namespace game;
@@ -19,6 +19,9 @@ Voltricity::~Voltricity() {
 
 
 void Voltricity::Run() {
+
+
+	ResourceManager::SetFont("res/Erika Ormig.ttf");
 
 	const int UPDATES_PER_SECOND = 25;
 	const int TICKS_BETWEEN_UPDATES = 1000 / UPDATES_PER_SECOND;

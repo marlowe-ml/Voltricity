@@ -36,6 +36,14 @@ void IntervalMove::StartInDirection(game::ClockTick currentTicks, game::Directio
 	Start(currentTicks);
 }
 
+void IntervalMove::SetDelayBetweenMoves(game::ClockTick delayBetweenMoves) {
+	_delayBetweenMoves = delayBetweenMoves;
+}
+
+game::ClockTick IntervalMove::GetDelayBetweenMoves() const {
+	return _delayBetweenMoves;
+}
+
 bool IntervalMove::IsStarted() const {
 	return _moving;
 }

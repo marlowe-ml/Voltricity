@@ -5,8 +5,8 @@
 
 using namespace volt;
 
-const game::ClockTick GameMechanics::FULL_DROP_INTERVAL = game::ClockSecond(1.0);
-
+const game::ClockSecond GameMechanics::FULL_DROP_INTERVAL = game::ClockSecond(1.0);
+const int GameMechanics::ROWS_PER_LEVEL = 1;
 // todo: add repeat initial delay
 
 GameMechanics::GameMechanics(Grid& grid) : _grid(grid),
@@ -18,6 +18,9 @@ _allowHardDrop(true)
 {}
 
 void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
+	_level = 0;
+	_score = 0;
+	_rowsToNextLevel = ROWS_PER_LEVEL;
 	spawnNewPiece();
 }
 
@@ -108,7 +111,9 @@ void GameMechanics::ProcessHardDropCommand_Release() {
 	_allowHardDrop = true;
 }
 
-
+int GameMechanics::GetLevel() const {
+	return _level;
+}
 
 void GameMechanics::movePiece(game::Direction::e direction, int units) {
 	int step = (direction == game::Direction::left) ? -1 : 1;
@@ -167,7 +172,33 @@ void GameMechanics::hardDrop() {
 void GameMechanics::onPieceDropBottom() {
 	// hit the bottom - attach piece and spawn next
 	_grid.AttachCurrentPieceBlocksToGrid(true);
-	_grid.ClearRows(_grid.GetCompletedRows());
+	std::vector<int> completedRows = _grid.GetCompletedRows();
+	_grid.ClearRows(completedRows);
 	_grid.CompactClearedRows();
+
+	onRowsCompleted(completedRows.size());
+
 	spawnNewPiece();
+}
+
+void GameMechanics::onRowsCompleted(int numRows) {
+	while (numRows >= _rowsToNextLevel) {
+		numRows -= _rowsToNextLevel;
+		increaseLevel();
+	}
+
+	if (numRows > 0)
+		_rowsToNextLevel -= numRows;
+}
+
+void GameMechanics::increaseLevel() {
+	_level++;
+	_rowsToNextLevel = ROWS_PER_LEVEL;
+	
+
+	game::ClockSecond dropInteval = _automaticDropMove.GetDelayBetweenMoves();
+	dropInteval = static_cast<double>(dropInteval) * 0.9;
+	_automaticDropMove.SetDelayBetweenMoves(dropInteval);
+
+	std::cout << "level: " << _level << ", " << static_cast<double>(dropInteval) << std::endl;
 }

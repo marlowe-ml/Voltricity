@@ -1,4 +1,5 @@
 #include "ScreenManager.h"
+#include "ResourceManager.h"
 #include "GameScreen.h"
 #include "Layout.h"
 
@@ -70,13 +71,21 @@ void GameScreen::update() {
 void GameScreen::present() {
 	_app->Clear(sf::Color(0,0,0));
 	_app->Draw(_grid);
+	_app->Draw(_labelLevel);
 }
 
 int GameScreen::onInit() {
 	game::Layout layout = game::ScreenManager::GetLayout();
-	layout.AlignDrawable(_grid, _grid.GetSize(), game::Direction::center, game::Direction::center);
+	layout.AlignDrawable(_grid, _grid.GetSize(), game::Direction::center);
 
-	// todo: align labels for score, level, nect piece(s), hold piece, etc.
+	game::Layout boardLayout = game::Layout(_grid, _grid.GetSize());
+
+	// layout.AlignDrawable(_lableLevel, _lableLevel.GetSize(), game::Direction::topright, sf::Vector2f(10, 0));
+
+	_labelLevel = game::Label("Voltage");
+		
+		//sf::String("Voltage", game::ResourceManager::GetFont());
+
 
 	_gameMechanics.StartNewGame(_activeScreenTime);
 

@@ -15,6 +15,8 @@ public:
 	void Stop();
 	void Start(game::ClockTick currentTicks);
 	void StartInDirection(game::ClockTick currentTicks, game::Direction::e direction);
+	void SetDelayBetweenMoves(game::ClockTick delayBetweenMoves);
+	game::ClockTick GetDelayBetweenMoves() const;
 	bool IsStarted() const;
 	bool IsPaused() const;
 

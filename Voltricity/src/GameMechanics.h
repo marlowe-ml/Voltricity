@@ -19,7 +19,7 @@ public:
 	void ProcessMoveCommand_Release(game::Direction::e direction);
 	void ProcessRotationCommand_Release(game::Direction::e direction);
 	void ProcessHardDropCommand_Release();
-
+	int GetLevel() const;
 
 private:
 	void spawnNewPiece();
@@ -27,8 +27,11 @@ private:
 	void movePiece(game::Direction::e direction, int units);
 	void hardDrop();
 	void onPieceDropBottom();
+	void onRowsCompleted(int numRows);
+	void increaseLevel();
 
-	static const game::ClockTick FULL_DROP_INTERVAL;
+	static const game::ClockSecond FULL_DROP_INTERVAL;
+	static const int ROWS_PER_LEVEL;
 
 	Grid& _grid;
 	PieceFactory _pieceFactory;
@@ -40,6 +43,9 @@ private:
 	IntervalMove _horizontalMove;
 	IntervalMove _rotationMove;
 
+	int _level;
+	int _rowsToNextLevel;
+	int _score;
 	
 
 };

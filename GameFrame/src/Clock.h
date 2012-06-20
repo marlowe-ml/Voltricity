@@ -35,8 +35,8 @@ namespace game {
 		ClockSecond(double seconds);
 		ClockSecond(ClockTick ticks);
 
-		operator double();
-		operator ClockTick();
+		operator double() const;
+		operator ClockTick() const;
 
 	private:
 		double _seconds;
