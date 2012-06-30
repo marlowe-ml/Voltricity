@@ -10,13 +10,16 @@ class Label : public sf::Drawable {
 
 public: 
 	Label();
-	Label(const std::string& text);
+	Label(const sf::String& text);
 	//void Align(Direction::e orientation, sf::Vector2f offset);
 	void Render(sf::RenderTarget& target) const;
 
+	const sf::Vector2f GetSize() const;
 
 private:
 	sf::String _text;
+	float _width;
+	float _height;
 
 };
 

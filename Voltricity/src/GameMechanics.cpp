@@ -197,7 +197,7 @@ void GameMechanics::increaseLevel() {
 	
 
 	game::ClockSecond dropInteval = _automaticDropMove.GetDelayBetweenMoves();
-	dropInteval = static_cast<double>(dropInteval) * 0.9;
+	dropInteval = static_cast<double>(dropInteval) * 0.92;
 	_automaticDropMove.SetDelayBetweenMoves(dropInteval);
 
 	std::cout << "level: " << _level << ", " << static_cast<double>(dropInteval) << std::endl;

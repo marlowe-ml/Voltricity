@@ -15,7 +15,7 @@ Layout::Layout()
 
 
 Layout::Layout(const sf::Drawable& drawable, const sf::Vector2f size) :
-_areaRect(sf::FloatRect(drawable.GetPosition().x,drawable.GetPosition().y,size.x,size.y)) 
+_areaRect(sf::FloatRect(drawable.GetPosition().x,drawable.GetPosition().y,drawable.GetPosition().x + size.x,drawable.GetPosition().y + size.y)) 
 {}
 
 Layout::Layout(sf::FloatRect areaRect)

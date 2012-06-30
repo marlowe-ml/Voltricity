@@ -72,22 +72,29 @@ void GameScreen::present() {
 	_app->Clear(sf::Color(0,0,0));
 	_app->Draw(_grid);
 	_app->Draw(_labelLevel);
+	_app->Draw(_labelLevelDigits);
 }
 
 int GameScreen::onInit() {
-	game::Layout layout = game::ScreenManager::GetLayout();
-	layout.AlignDrawable(_grid, _grid.GetSize(), game::Direction::center);
-
-	game::Layout boardLayout = game::Layout(_grid, _grid.GetSize());
-
-	// layout.AlignDrawable(_lableLevel, _lableLevel.GetSize(), game::Direction::topright, sf::Vector2f(10, 0));
-
-	_labelLevel = game::Label("Voltage");
-		
-		//sf::String("Voltage", game::ResourceManager::GetFont());
-
+	game::ScreenManager::GetLayout().AlignDrawable(_grid, _grid.GetSize(), game::Direction::center);
+	alignLabels();
 
 	_gameMechanics.StartNewGame(_activeScreenTime);
-
 	return EXIT_SUCCESS;
+}
+
+void GameScreen::alignLabels() {
+	sf::Vector2f gridTopRight = sf::Vector2f(_grid.GetPosition().x + _grid.GetSize().x, _grid.GetPosition().y);
+
+	sf::FloatRect eastRect = sf::FloatRect(gridTopRight.x, gridTopRight.y, game::ScreenManager::GetLayout().GetRect().Right, _grid.GetPosition().y + _grid.GetSize().y);
+
+	game::Layout eastSection = game::Layout(eastRect);
+
+	_labelLevel = game::Label(sf::String("Voltage", game::ResourceManager::GetFont(), 20));
+	eastSection.AlignDrawable(_labelLevel, _labelLevel.GetSize(), game::Direction::topleft, sf::Vector2f(10,0));
+
+	_labelLevelDigits = game::Label(sf::String("000", game::ResourceManager::GetFont(), 20));
+	_labelLevelDigits.SetPosition(_labelLevel.GetPosition().x, _labelLevel.GetPosition().y + _labelLevel.GetSize().y);
+
+
 }

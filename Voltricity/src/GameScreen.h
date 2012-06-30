@@ -26,7 +26,9 @@ private:
 	Grid _grid;
 
 	game::Label _labelLevel;
+	game::Label _labelLevelDigits;
 
+	void alignLabels();
 };
 
 
