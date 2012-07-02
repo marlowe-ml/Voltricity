@@ -28,6 +28,11 @@ private:
 	game::Label _labelLevel;
 	game::Label _labelLevelDigits;
 
+	game::Label _labelScore;
+	game::Label _labelScoreDigits;
+
+	game::Label _labelNext;
+
 	void alignLabels();
 };
 

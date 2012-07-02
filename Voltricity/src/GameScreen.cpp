@@ -73,6 +73,10 @@ void GameScreen::present() {
 	_app->Draw(_grid);
 	_app->Draw(_labelLevel);
 	_app->Draw(_labelLevelDigits);
+	_app->Draw(_labelScore);
+	_app->Draw(_labelScoreDigits);
+	_app->Draw(_labelNext);
+
 }
 
 int GameScreen::onInit() {
@@ -91,10 +95,20 @@ void GameScreen::alignLabels() {
 	game::Layout eastSection = game::Layout(eastRect);
 
 	_labelLevel = game::Label(sf::String("Voltage", game::ResourceManager::GetFont(), 20));
-	eastSection.AlignDrawable(_labelLevel, _labelLevel.GetSize(), game::Direction::topleft, sf::Vector2f(10,0));
+	_labelLevel.SetPosition(_grid.GetPosition().x + _grid.GetSize().x + 10, _grid.GetPosition().y);
 
 	_labelLevelDigits = game::Label(sf::String("000", game::ResourceManager::GetFont(), 20));
 	_labelLevelDigits.SetPosition(_labelLevel.GetPosition().x, _labelLevel.GetPosition().y + _labelLevel.GetSize().y);
 
 
+	_labelScore = game::Label(sf::String("Score", game::ResourceManager::GetFont(), 20));
+	_labelScore.SetPosition(_labelLevelDigits.GetPosition().x, _labelLevelDigits.GetPosition().y + _labelLevelDigits.GetSize().y + 20);
+
+	_labelScoreDigits = game::Label(sf::String("000000", game::ResourceManager::GetFont(), 20));
+	_labelScoreDigits.SetPosition(_labelScore.GetPosition().x, _labelScore.GetPosition().y + _labelScore.GetSize().y);
+
+	_labelNext = game::Label(sf::String("Next", game::ResourceManager::GetFont(), 20));
+	_labelNext.SetPosition(_grid.GetPosition().x - _labelNext.GetSize().x - 10, _grid.GetPosition().y);
+
+	// next: update the labels according to gameMechanics state
 }
