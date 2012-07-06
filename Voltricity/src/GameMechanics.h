@@ -4,13 +4,16 @@
 #include "Grid.h"
 #include "PieceFactory.h"
 #include "IntervalMove.h"
+#include "IGameEventListener.h"
 
 namespace volt {
+
 
 class GameMechanics {
 
 public:
 	GameMechanics(Grid& grid);
+	void SetGameEventListener(IGameEventListener* listener);
 	void AdvanceGame(game::ClockTick activeScreenTime);
 	void StartNewGame(game::ClockTick activeScreenTime);
 	void ProcessMoveCommand(game::Direction::e direction);
@@ -46,6 +49,8 @@ private:
 	int _level;
 	int _rowsToNextLevel;
 	int _score;
+
+	IGameEventListener* _gameEventListener;
 	
 
 };

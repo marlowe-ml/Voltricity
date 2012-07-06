@@ -5,13 +5,19 @@
 #include "Label.h"
 #include "Grid.h"
 #include "GameMechanics.h"
+#include "IGameEventListener.h"
 
 namespace volt {
 
-class GameScreen : public game::Screen {
+class GameScreen : public game::Screen, public IGameEventListener {
 
 public:
 	GameScreen();
+
+	virtual void LevelChanged(int oldLevel, int newLevel);
+	virtual void ScoreChanged(int oldScore, int newScore);
+	virtual void NextPieceSpawned(const Piece& newPiece, const Piece& nextPiece);
+
 
 protected:
 
@@ -32,6 +38,8 @@ private:
 	game::Label _labelScoreDigits;
 
 	game::Label _labelNext;
+
+
 
 	void alignLabels();
 };

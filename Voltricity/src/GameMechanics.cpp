@@ -14,8 +14,13 @@ _automaticDropMove(game::Direction::bottom, FULL_DROP_INTERVAL),
 _manualDropMove(game::Direction::bottom, game::ClockSecond(0.075)),
 _horizontalMove(game::Direction::none, game::ClockSecond(0.08)),
 _rotationMove(game::Direction::none, game::ClockSecond(0.15)),
-_allowHardDrop(true)
+_allowHardDrop(true), _gameEventListener(NULL)
 {}
+
+void GameMechanics::SetGameEventListener(IGameEventListener* listener) {
+	_gameEventListener = listener;
+
+}
 
 void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 	_level = 0;
@@ -182,6 +187,11 @@ void GameMechanics::onPieceDropBottom() {
 }
 
 void GameMechanics::onRowsCompleted(int numRows) {
+	// todo: refine scoring, allow for combo points, timing
+	int addScore = static_cast<int>(((_level+1) * 1.2) * static_cast<double>(numRows) * (static_cast<double>(numRows)/4.0) * 100.0);
+	_gameEventListener->ScoreChanged(_score, _score+addScore);
+	_score +=  addScore;
+
 	while (numRows >= _rowsToNextLevel) {
 		numRows -= _rowsToNextLevel;
 		increaseLevel();
@@ -192,8 +202,12 @@ void GameMechanics::onRowsCompleted(int numRows) {
 }
 
 void GameMechanics::increaseLevel() {
+	if (_gameEventListener!=NULL)
+		_gameEventListener->LevelChanged(_level, _level+1);
+
 	_level++;
 	_rowsToNextLevel = ROWS_PER_LEVEL;
+	
 	
 
 	game::ClockSecond dropInteval = _automaticDropMove.GetDelayBetweenMoves();
@@ -201,4 +215,6 @@ void GameMechanics::increaseLevel() {
 	_automaticDropMove.SetDelayBetweenMoves(dropInteval);
 
 	std::cout << "level: " << _level << ", " << static_cast<double>(dropInteval) << std::endl;
+
+	
 }

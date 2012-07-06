@@ -2,12 +2,28 @@
 #include "ResourceManager.h"
 #include "GameScreen.h"
 #include "Layout.h"
+#include "Utils.h"
 
 using namespace volt;
 
+void GameScreen::LevelChanged(int oldLevel, int newLevel) {
+	_labelLevelDigits.SetText(game::Utils::IntToStr(newLevel));
+}
+
+void GameScreen::ScoreChanged(int oldScore, int newScore) {
+	_labelScoreDigits.SetText(game::Utils::IntToStr(newScore));
+}
+
+void GameScreen::NextPieceSpawned(const Piece& newPiece, const Piece& nextPiece) {
+
+}
+
 GameScreen::GameScreen() 
 : _grid(10, 22), _gameMechanics(_grid)
-{}
+{
+	
+	_gameMechanics.SetGameEventListener(this);
+}
 
 void GameScreen::handleEvent(const sf::Event& e) {
 	if (e.Type == sf::Event::KeyPressed) {
@@ -97,18 +113,16 @@ void GameScreen::alignLabels() {
 	_labelLevel = game::Label(sf::String("Voltage", game::ResourceManager::GetFont(), 20));
 	_labelLevel.SetPosition(_grid.GetPosition().x + _grid.GetSize().x + 10, _grid.GetPosition().y);
 
-	_labelLevelDigits = game::Label(sf::String("000", game::ResourceManager::GetFont(), 20));
+	_labelLevelDigits = game::Label(sf::String("0", game::ResourceManager::GetFont(), 20));
 	_labelLevelDigits.SetPosition(_labelLevel.GetPosition().x, _labelLevel.GetPosition().y + _labelLevel.GetSize().y);
 
 
 	_labelScore = game::Label(sf::String("Score", game::ResourceManager::GetFont(), 20));
 	_labelScore.SetPosition(_labelLevelDigits.GetPosition().x, _labelLevelDigits.GetPosition().y + _labelLevelDigits.GetSize().y + 20);
 
-	_labelScoreDigits = game::Label(sf::String("000000", game::ResourceManager::GetFont(), 20));
+	_labelScoreDigits = game::Label(sf::String("0", game::ResourceManager::GetFont(), 20));
 	_labelScoreDigits.SetPosition(_labelScore.GetPosition().x, _labelScore.GetPosition().y + _labelScore.GetSize().y);
 
 	_labelNext = game::Label(sf::String("Next", game::ResourceManager::GetFont(), 20));
 	_labelNext.SetPosition(_grid.GetPosition().x - _labelNext.GetSize().x - 10, _grid.GetPosition().y);
-
-	// next: update the labels according to gameMechanics state
 }
