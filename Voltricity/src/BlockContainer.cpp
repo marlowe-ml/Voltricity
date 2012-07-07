@@ -1,4 +1,5 @@
 #include "BlockContainer.h"
+#include "GameSettings.h"
 
 using namespace volt;
 
@@ -6,8 +7,8 @@ using namespace volt;
 BlockContainer::BlockContainer(int columnCount, int rowCount) : _columnCount(columnCount), _rowCount(rowCount) {
 	_blocks.reserve(_columnCount);
 
-	_blockSize = sf::Vector2f(16, 16);
-	_blockGap = 1.0f;
+	_blockSize = sf::Vector2f(GameSettings::BlockSize, GameSettings::BlockSize);
+	_blockGap = GameSettings::BlockGap;
 
 	for (int x=0; x < _columnCount; x++) {
 		GridRow newRow;

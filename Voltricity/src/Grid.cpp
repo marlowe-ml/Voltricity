@@ -120,7 +120,7 @@ void Grid::Render(sf::RenderTarget& target) const {
 	outlineRect.EnableFill(false);
 	target.Draw(outlineRect);
 
-	target.Draw(_currentPiece.GetCurrentFrame());
+	target.Draw(_currentPiece);
 
 	// draw blocks
 	BlockContainer::Render(target);	

@@ -9,6 +9,7 @@ namespace volt {
 class PieceFactory {
 public:
 	PieceFactory();
+	Piece CreatePiece(PieceType::e piecetype) const;
 	Piece CreateRandomPiece() const;
 
 private:

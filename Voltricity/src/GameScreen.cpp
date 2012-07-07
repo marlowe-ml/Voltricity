@@ -19,9 +19,8 @@ void GameScreen::NextPieceSpawned(const Piece& newPiece, const Piece& nextPiece)
 }
 
 GameScreen::GameScreen() 
-: _grid(10, 22), _gameMechanics(_grid)
+: _grid(10, 22), _gameMechanics(_grid), _pieceQueue(4)
 {
-	
 	_gameMechanics.SetGameEventListener(this);
 }
 
@@ -92,7 +91,7 @@ void GameScreen::present() {
 	_app->Draw(_labelScore);
 	_app->Draw(_labelScoreDigits);
 	_app->Draw(_labelNext);
-
+	_app->Draw(_pieceQueue);
 }
 
 int GameScreen::onInit() {
@@ -100,6 +99,14 @@ int GameScreen::onInit() {
 	alignLabels();
 
 	_gameMechanics.StartNewGame(_activeScreenTime);
+
+	PieceFactory pf;
+	_pieceQueue.SetPosition(0,0);
+	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::I));
+	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::L));
+	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::T));
+	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::O));
+
 	return EXIT_SUCCESS;
 }
 

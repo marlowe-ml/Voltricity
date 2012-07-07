@@ -1,6 +1,7 @@
 #ifndef Piece_h__
 #define Piece_h__
 
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include "Direction.h"
 #include "PieceFrame.h"
@@ -12,7 +13,7 @@ public:
 	enum e {I=0,J=1,L=2,O=3,S=4,T=5,Z=6,count=7};
 };
 
-class Piece {
+class Piece : public sf::Drawable {
 
 public:
 	Piece();

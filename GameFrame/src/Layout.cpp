@@ -58,7 +58,7 @@ sf::Vector2f Layout::GetAlignedPosition(sf::Vector2f objSize, Direction::e snapT
 		newPos.x = _areaRect.Right - objWidth;
 		break;
 	case Direction::hcenter:
-		newPos.x = (_areaRect.GetWidth() / 2) - (objWidth / 2);
+		newPos.x = _areaRect.Left + (_areaRect.GetWidth() / 2) - (objWidth / 2);
 		break;
 	}
 
@@ -70,7 +70,7 @@ sf::Vector2f Layout::GetAlignedPosition(sf::Vector2f objSize, Direction::e snapT
 		newPos.y = _areaRect.Bottom - objHeight;
 		break;
 	case Direction::vcenter:
-		newPos.y = (_areaRect.GetHeight() / 2) - (objHeight / 2);
+		newPos.y = _areaRect.Top + (_areaRect.GetHeight() / 2) - (objHeight / 2);
 		break;
 	}
 

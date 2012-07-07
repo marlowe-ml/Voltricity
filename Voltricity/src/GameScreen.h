@@ -2,10 +2,11 @@
 #define GameScreen_h__
 
 #include "Screen.h"
-#include "Label.h"
-#include "Grid.h"
-#include "GameMechanics.h"
 #include "IGameEventListener.h"
+#include "GameMechanics.h"
+#include "Grid.h"
+#include "Label.h"
+#include "PieceQueue.h"
 
 namespace volt {
 
@@ -39,7 +40,7 @@ private:
 
 	game::Label _labelNext;
 
-
+	PieceQueue _pieceQueue;
 
 	void alignLabels();
 };
