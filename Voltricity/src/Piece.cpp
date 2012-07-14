@@ -1,8 +1,12 @@
 #include "Piece.h"
+#include "GameSettings.h"
 
 using namespace volt;
 
-Piece::Piece() : _currentFrameIndex(0) {
+Piece::Piece(sf::Vector2f blockSize) : _currentFrameIndex(0), _blockSize(blockSize) {
+}
+
+Piece::Piece() : _currentFrameIndex(0), _blockSize(GameSettings::BlockSize) {
 }
 
 Piece::~Piece() {}
@@ -21,7 +25,15 @@ void Piece::SetPosition(const sf::Vector2f& pixelPos) {
 	}
 }
 
+void Piece::SetBlockSize(sf::Vector2f size) {
+	_blockSize = size;
+	for (unsigned int i=0; i < _frames.size(); i++) {
+		_frames[i].SetBlockSize(_blockSize);
+	}
+}
+
 void Piece::AddFrame(PieceFrame frame) {
+	frame.SetBlockSize(_blockSize);
 	_frames.push_back(frame);
 }
 

@@ -14,6 +14,8 @@ public:
 	bool IsEmpty() const;
 	void SetEmpty(bool val);
 
+	void SetSize(sf::Vector2f size);
+
 private:
 	float _width;
 	float _height;

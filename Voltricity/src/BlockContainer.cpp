@@ -7,7 +7,7 @@ using namespace volt;
 BlockContainer::BlockContainer(int columnCount, int rowCount) : _columnCount(columnCount), _rowCount(rowCount) {
 	_blocks.reserve(_columnCount);
 
-	_blockSize = sf::Vector2f(GameSettings::BlockSize, GameSettings::BlockSize);
+	_blockSize = GameSettings::BlockSize;
 	_blockGap = GameSettings::BlockGap;
 
 	for (int x=0; x < _columnCount; x++) {
@@ -58,6 +58,12 @@ sf::Vector2f BlockContainer::GetSize() const {
 
 void BlockContainer::SetBlockSize(sf::Vector2f size) {
 	_blockSize = size;
+	for (int x=0; x < _columnCount; x++) {
+		for (int y = 0; y < _rowCount; y++) {
+			_blocks[x][y].SetSize(size);
+		}
+	}
+
 	positionBlocks();
 }
 

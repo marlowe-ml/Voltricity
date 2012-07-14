@@ -1,12 +1,13 @@
 #include "PieceFactory.h"
+#include "GameSettings.h"
 
 using namespace volt;
 
 PieceFactory::PieceFactory() {}
 
-Piece PieceFactory::CreatePiece(PieceType::e piecetype) const {
-
-	Piece piece = Piece();
+Piece PieceFactory::CreatePiece(PieceType::e piecetype, sf::Vector2f blockSize) const {
+	
+	Piece piece = Piece(blockSize);
 
 	PieceFrame frame = PieceFrame(3,3);
 
@@ -212,12 +213,19 @@ Piece PieceFactory::CreatePiece(PieceType::e piecetype) const {
 	}
 
 	return piece;
+}
 
+Piece PieceFactory::CreatePiece(PieceType::e piecetype) const {
+	return CreatePiece(piecetype, GameSettings::BlockSize);
 }
 
 Piece PieceFactory::CreateRandomPiece() const {
+	return CreateRandomPiece(GameSettings::BlockSize);
+}
+
+Piece PieceFactory::CreateRandomPiece(sf::Vector2f blocksize) const {
 	// todo: default random is imperfect, keep statistics and ensure normal distribution
 	PieceType::e piecetype = static_cast<PieceType::e>(random.Next() % PieceType::count);
-	return CreatePiece(piecetype);
+	return CreatePiece(piecetype, blocksize);
 
 }

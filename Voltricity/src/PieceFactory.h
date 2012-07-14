@@ -10,8 +10,10 @@ class PieceFactory {
 public:
 	PieceFactory();
 	Piece CreatePiece(PieceType::e piecetype) const;
+	Piece CreatePiece(PieceType::e piecetype, sf::Vector2f blockSize) const;
 	Piece CreateRandomPiece() const;
-
+	Piece CreateRandomPiece(sf::Vector2f blockSize) const;
+	
 private:
 	game::Random random;
 

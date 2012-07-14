@@ -2,5 +2,6 @@
 
 using namespace volt;
 
-float GameSettings::BlockSize = 16.0f;
+sf::Vector2f GameSettings::BlockSize = sf::Vector2f(16.0f, 16.0f);
+sf::Vector2f GameSettings::BlockSizeForQueue = sf::Vector2f(8.0f, 8.0f);
 float GameSettings::BlockGap = 1.0f;

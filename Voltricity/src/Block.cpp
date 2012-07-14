@@ -7,8 +7,11 @@ Block::Block(const sf::Color color, float width, float height)
 {
 	SetPosition(0,0);
 	SetColor(color);
-	
-	
+}
+
+void Block::SetSize(sf::Vector2f size) {
+	_width = size.x;
+	_height = size.y;
 }
 
 bool Block::IsEmpty() const {

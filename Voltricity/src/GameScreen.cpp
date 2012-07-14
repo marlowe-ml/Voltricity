@@ -1,6 +1,7 @@
 #include "ScreenManager.h"
 #include "ResourceManager.h"
 #include "GameScreen.h"
+#include "GameSettings.h"
 #include "Layout.h"
 #include "Utils.h"
 
@@ -102,10 +103,10 @@ int GameScreen::onInit() {
 
 	PieceFactory pf;
 	_pieceQueue.SetPosition(0,0);
-	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::I));
-	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::L));
-	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::T));
-	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::O));
+	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::I, GameSettings::BlockSizeForQueue));
+	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::L, GameSettings::BlockSizeForQueue));
+	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::T, GameSettings::BlockSizeForQueue));
+	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::O, GameSettings::BlockSizeForQueue));
 
 	return EXIT_SUCCESS;
 }

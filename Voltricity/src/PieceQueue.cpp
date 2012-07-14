@@ -7,8 +7,8 @@ using namespace volt;
 
 PieceQueue::PieceQueue(unsigned int numPieces) : _maxPieces(numPieces)
 {
-	_width = 5 * (GameSettings::BlockSize + GameSettings::BlockGap) + GameSettings::BlockGap;
-	_heightPerPiece = 6 * (GameSettings::BlockSize + GameSettings::BlockGap) + GameSettings::BlockGap;
+	_width = 5 * (GameSettings::BlockSizeForQueue.x + GameSettings::BlockGap) + GameSettings::BlockGap;
+	_heightPerPiece = 4 * (GameSettings::BlockSizeForQueue.y + GameSettings::BlockGap) + GameSettings::BlockGap;
 	_height = _maxPieces * _heightPerPiece;
 	
 }

@@ -17,6 +17,7 @@ class Piece : public sf::Drawable {
 
 public:
 	Piece();
+	Piece(sf::Vector2f blockSize);
 	virtual ~Piece();
 
 	void Render(sf::RenderTarget& target) const;
@@ -24,10 +25,12 @@ public:
 	void SetPosition(const sf::Vector2f& pixelPos);
 	void AddFrame(PieceFrame frame);
 	void Rotate(game::Direction::e dir);
+	void SetBlockSize(sf::Vector2f size);
 
 private:
 	std::vector<PieceFrame> _frames;
 	int _currentFrameIndex;
+	sf::Vector2f _blockSize;
 
 	void Piece::keepValidFrameIndex();
 
