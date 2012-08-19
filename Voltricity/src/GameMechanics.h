@@ -5,6 +5,7 @@
 #include "PieceFactory.h"
 #include "IntervalMove.h"
 #include "IGameEventListener.h"
+#include "PieceQueue.h"
 
 namespace volt {
 
@@ -12,7 +13,7 @@ namespace volt {
 class GameMechanics {
 
 public:
-	GameMechanics(Grid& grid);
+	GameMechanics(Grid& grid, PieceQueue& pieceQueue);
 	void SetGameEventListener(IGameEventListener* listener);
 	void AdvanceGame(game::ClockTick activeScreenTime);
 	void StartNewGame(game::ClockTick activeScreenTime);
@@ -25,7 +26,7 @@ public:
 	int GetLevel() const;
 
 private:
-	void spawnNewPiece();
+	void spawnNextPiece();
 
 	void movePiece(game::Direction::e direction, int units);
 	void hardDrop();
@@ -37,6 +38,7 @@ private:
 	static const int ROWS_PER_LEVEL;
 
 	Grid& _grid;
+	PieceQueue& _pieceQueue;
 	PieceFactory _pieceFactory;
 	bool _allowHardDrop;
 	game::ClockTick _activeScreenTime;

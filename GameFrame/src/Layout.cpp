@@ -40,8 +40,7 @@ void Layout::AlignSprite(sf::Sprite& obj, Direction::e hSnap, Direction::e vSnap
 
 void Layout::AlignDrawable(sf::Drawable& obj, sf::Vector2f size, Direction::e snapToEdge, sf::Vector2f offset /* = sf::Vector2f(0, 0) */) const {
 	sf::Vector2f centerPos = GetAlignedPosition(size, snapToEdge, offset);
-	obj.SetX(centerPos.x);
-	obj.SetY(centerPos.y);
+	obj.SetPosition(centerPos);
 }
 
 sf::Vector2f Layout::GetAlignedPosition(sf::Vector2f objSize, Direction::e snapToEdge, sf::Vector2f offset /* = sf::Vector2f(0, 0) */) const {

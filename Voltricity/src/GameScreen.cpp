@@ -15,12 +15,12 @@ void GameScreen::ScoreChanged(int oldScore, int newScore) {
 	_labelScoreDigits.SetText(game::Utils::IntToStr(newScore));
 }
 
-void GameScreen::NextPieceSpawned(const Piece& newPiece, const Piece& nextPiece) {
+void GameScreen::NextPieceSpawned(const Piece& nextPiece) {
 
 }
 
 GameScreen::GameScreen() 
-: _grid(10, 22), _gameMechanics(_grid), _pieceQueue(4)
+: _grid(10, 22), _pieceQueue(4), _gameMechanics(_grid, _pieceQueue)
 {
 	_gameMechanics.SetGameEventListener(this);
 }
@@ -99,14 +99,12 @@ int GameScreen::onInit() {
 	game::ScreenManager::GetLayout().AlignDrawable(_grid, _grid.GetSize(), game::Direction::center);
 	alignLabels();
 
+	
+	float pieceQueueOffset_x = (_labelNext.GetSize().x - _pieceQueue.GetSize().x) / 2;
+	_pieceQueue.SetPosition(_labelNext.GetPosition().x + pieceQueueOffset_x, _labelNext.GetPosition().y + 20);
+
 	_gameMechanics.StartNewGame(_activeScreenTime);
 
-	PieceFactory pf;
-	_pieceQueue.SetPosition(0,0);
-	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::I, GameSettings::BlockSizeForQueue));
-	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::L, GameSettings::BlockSizeForQueue));
-	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::T, GameSettings::BlockSizeForQueue));
-	_pieceQueue.PushNewPiece(pf.CreatePiece(PieceType::O, GameSettings::BlockSizeForQueue));
 
 	return EXIT_SUCCESS;
 }

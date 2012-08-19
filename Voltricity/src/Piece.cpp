@@ -19,10 +19,11 @@ const PieceFrame& Piece::GetCurrentFrame() const {
 	return _frames[_currentFrameIndex];
 }
 
-void Piece::SetPosition(const sf::Vector2f& pixelPos) {
+void Piece::SetPosition(const sf::Vector2f& pixelPos) {	
 	for (unsigned int i=0; i < _frames.size(); i++) {
 		_frames[i].SetPosition(pixelPos);
 	}
+	//Drawable::SetPosition(pixelPos);
 }
 
 void Piece::SetBlockSize(sf::Vector2f size) {

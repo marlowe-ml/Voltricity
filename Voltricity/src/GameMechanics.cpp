@@ -9,7 +9,7 @@ const game::ClockSecond GameMechanics::FULL_DROP_INTERVAL = game::ClockSecond(1.
 const int GameMechanics::ROWS_PER_LEVEL = 1;
 // todo: add repeat initial delay
 
-GameMechanics::GameMechanics(Grid& grid) : _grid(grid),
+GameMechanics::GameMechanics(Grid& grid, PieceQueue& pieceQueue) : _grid(grid), _pieceQueue(pieceQueue),
 _automaticDropMove(game::Direction::bottom, FULL_DROP_INTERVAL), 
 _manualDropMove(game::Direction::bottom, game::ClockSecond(0.075)),
 _horizontalMove(game::Direction::none, game::ClockSecond(0.08)),
@@ -19,15 +19,23 @@ _allowHardDrop(true), _gameEventListener(NULL)
 
 void GameMechanics::SetGameEventListener(IGameEventListener* listener) {
 	_gameEventListener = listener;
-
 }
 
 void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 	_level = 0;
 	_score = 0;
 	_rowsToNextLevel = ROWS_PER_LEVEL;
-	spawnNewPiece();
+
+	
+	int maxPieces = _pieceQueue.GetMaxPieces();
+	for (int i=0; i<maxPieces; i++) {
+		_pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece());			
+	}
+
+	spawnNextPiece();
 }
+
+
 
 void GameMechanics::AdvanceGame(game::ClockTick activeScreenTime) {
 	_activeScreenTime = activeScreenTime;
@@ -157,12 +165,19 @@ void GameMechanics::movePiece(game::Direction::e direction, int units) {
 }
 
 
-void GameMechanics::spawnNewPiece() {
-	Piece piece = _pieceFactory.CreateRandomPiece();
+void GameMechanics::spawnNextPiece() {
+	Piece nextPiece = _pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece()); // _pieceFactory.CreateRandomPiece();
+	nextPiece.SetPosition(sf::Vector2f(0,0));
+	// todo: this is a hack, also actual piece sizes will differ (smaller for the preview queue)	
+	nextPiece.SetX(0);
+	nextPiece.SetY(0);
+	// possibly return piece type instead and use CreatePiece with proper block size
 
-	_grid.SetCurrentPiece(piece);
+	_grid.SetCurrentPiece(nextPiece);
 	_grid.MoveCurrentPieceTo(0,0);
 	_automaticDropMove.Stop();
+
+	_gameEventListener->NextPieceSpawned(nextPiece);
 }
 
 void GameMechanics::hardDrop() {
@@ -183,7 +198,7 @@ void GameMechanics::onPieceDropBottom() {
 
 	onRowsCompleted(completedRows.size());
 
-	spawnNewPiece();
+	spawnNextPiece();
 }
 
 void GameMechanics::onRowsCompleted(int numRows) {

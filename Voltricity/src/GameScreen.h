@@ -17,7 +17,7 @@ public:
 
 	virtual void LevelChanged(int oldLevel, int newLevel);
 	virtual void ScoreChanged(int oldScore, int newScore);
-	virtual void NextPieceSpawned(const Piece& newPiece, const Piece& nextPiece);
+	virtual void NextPieceSpawned(const Piece& nextPiece);
 
 
 protected:

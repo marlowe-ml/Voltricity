@@ -13,17 +13,18 @@ PieceQueue::PieceQueue(unsigned int numPieces) : _maxPieces(numPieces)
 	
 }
 
-void PieceQueue::PushNewPiece(Piece piece, Piece* poppedPieceByRef /* = NULL*/) {
-	if (poppedPieceByRef!=NULL)
-		poppedPieceByRef = NULL;
+Piece PieceQueue::PushNewPiece(Piece piece) {
+	Piece poppedPiece;
 
 	if (_pieces.size() + 1 > _maxPieces) {
-		*poppedPieceByRef = _pieces.front();
+		poppedPiece = _pieces.front();
 		_pieces.pop_front();
 	}
 	_pieces.push_back(piece);
 
 	alignPieces();
+
+	return poppedPiece;
 }
 
 void PieceQueue::alignPieces() {
@@ -40,13 +41,16 @@ void PieceQueue::alignPieces() {
 }
 
 void PieceQueue::Render(sf::RenderTarget& target) const {
-	// todo: draw pieces stacked vertically, centered, 5x6 per piece
 	for (PieceQueueContainer::const_iterator it = _pieces.begin(); it!=_pieces.end(); it++) {
 		target.Draw(*it);
 	}
 
 }
 
+sf::Vector2f PieceQueue::GetSize() const {
+	return sf::Vector2f(_width, _height);
+}
 
-
-
+unsigned int PieceQueue::GetMaxPieces() const {
+	return _maxPieces;
+}

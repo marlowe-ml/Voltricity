@@ -12,9 +12,11 @@ namespace volt {
 	class PieceQueue : public sf::Drawable {
 	public:
 		PieceQueue(unsigned int numPieces);
-		void PushNewPiece(Piece piece, Piece* poppedPieceByRef=NULL);
+		Piece PushNewPiece(Piece piece);
 
 		virtual void Render(sf::RenderTarget& target) const;
+		sf::Vector2f GetSize() const;
+		unsigned int GetMaxPieces() const;
 
 	private:
 		PieceQueueContainer _pieces;
