@@ -9,6 +9,14 @@ Piece::Piece(sf::Vector2f blockSize) : _currentFrameIndex(0), _blockSize(blockSi
 Piece::Piece() : _currentFrameIndex(0), _blockSize(GameSettings::BlockSize) {
 }
 
+PieceType::e Piece::GetPieceType() const {
+	return _pieceType;
+}
+
+void Piece::SetPieceType(PieceType::e newType) {
+	_pieceType = newType;
+}
+
 Piece::~Piece() {}
 
 void Piece::Render(sf::RenderTarget& target) const {

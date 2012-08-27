@@ -2,6 +2,7 @@
 #include "Clock.h"
 #include "Layout.h"
 #include "ScreenManager.h"
+#include "GameSettings.h"
 
 using namespace volt;
 
@@ -29,12 +30,11 @@ void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 	
 	int maxPieces = _pieceQueue.GetMaxPieces();
 	for (int i=0; i<maxPieces; i++) {
-		_pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece());			
+		_pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece(GameSettings::BlockSizeForQueue));			
 	}
 
 	spawnNextPiece();
 }
-
 
 
 void GameMechanics::AdvanceGame(game::ClockTick activeScreenTime) {
@@ -166,12 +166,10 @@ void GameMechanics::movePiece(game::Direction::e direction, int units) {
 
 
 void GameMechanics::spawnNextPiece() {
-	Piece nextPiece = _pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece()); // _pieceFactory.CreateRandomPiece();
-	nextPiece.SetPosition(sf::Vector2f(0,0));
-	// todo: this is a hack, also actual piece sizes will differ (smaller for the preview queue)	
-	nextPiece.SetX(0);
-	nextPiece.SetY(0);
-	// possibly return piece type instead and use CreatePiece with proper block size
+	Piece nextFromQueue = _pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece(GameSettings::BlockSizeForQueue)); // _pieceFactory.CreateRandomPiece();
+	
+	Piece nextPiece = _pieceFactory.CreatePiece(nextFromQueue.GetPieceType());
+	 nextPiece.SetPosition(sf::Vector2f(0,0));
 
 	_grid.SetCurrentPiece(nextPiece);
 	_grid.MoveCurrentPieceTo(0,0);

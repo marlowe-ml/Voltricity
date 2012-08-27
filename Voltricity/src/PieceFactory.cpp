@@ -8,6 +8,7 @@ PieceFactory::PieceFactory() {}
 Piece PieceFactory::CreatePiece(PieceType::e piecetype, sf::Vector2f blockSize) const {
 	
 	Piece piece = Piece(blockSize);
+	piece.SetPieceType(piecetype);
 
 	PieceFrame frame = PieceFrame(3,3);
 
