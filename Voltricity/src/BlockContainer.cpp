@@ -31,6 +31,16 @@ void BlockContainer::positionBlocks() {
 	}
 }
 
+void BlockContainer::SetAlpha(float alpha) {
+	for (int x=0; x < _columnCount; x++) {
+		for (int y = 0; y < _rowCount; y++) {
+			sf::Color color = _blocks[x][y].GetColor();
+			color.a = alpha;
+			_blocks[x][y].SetColor(color);
+		}
+	}
+}
+
 bool BlockContainer::IsEmpty() const {
 	for (GridBlocks::const_iterator it = _blocks.begin(); it != _blocks.end(); it++) {
 		for (GridRow::const_iterator rit = (*it).begin(); rit != (*it).end(); rit++) {

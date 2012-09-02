@@ -38,11 +38,13 @@ public:
 
 private:
 	Piece _currentPiece;
-	Piece _ghostPiece;	// todo: continue
+	Piece _ghostPiece;
 	sf::Vector2i _currentPieceCellPosition;
 
-	
-	bool isValidPositionForCurrentPiece(int cellX, int cellY) const;
+	bool isValidPositionForPiece(int cellX, int cellY, Piece& piece) const;
+	bool doMovePieceTo(int cellX, int cellY, Piece& piece);
+	void onCurrentPiecePositionOrRotationChanged(const sf::Vector2i newPos, const game::Direction::e rotationDir);
+
 };
 
 }

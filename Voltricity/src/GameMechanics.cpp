@@ -166,7 +166,7 @@ void GameMechanics::movePiece(game::Direction::e direction, int units) {
 
 
 void GameMechanics::spawnNextPiece() {
-	Piece nextFromQueue = _pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece(GameSettings::BlockSizeForQueue)); // _pieceFactory.CreateRandomPiece();
+	Piece nextFromQueue = _pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece(GameSettings::BlockSizeForQueue));
 	
 	Piece nextPiece = _pieceFactory.CreatePiece(nextFromQueue.GetPieceType());
 	 nextPiece.SetPosition(sf::Vector2f(0,0));
@@ -220,8 +220,6 @@ void GameMechanics::increaseLevel() {
 
 	_level++;
 	_rowsToNextLevel = ROWS_PER_LEVEL;
-	
-	
 
 	game::ClockSecond dropInteval = _automaticDropMove.GetDelayBetweenMoves();
 	dropInteval = static_cast<double>(dropInteval) * 0.92;

@@ -27,6 +27,7 @@ public:
 	void AddFrame(PieceFrame frame);
 	void Rotate(game::Direction::e dir);
 	void SetBlockSize(sf::Vector2f size);
+	void SetAlpha(float alpha);
 
 	PieceType::e GetPieceType() const;
 	void SetPieceType(PieceType::e newType);

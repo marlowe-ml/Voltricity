@@ -28,6 +28,8 @@ public:
 
 	void positionBlocks();
 
+	void SetAlpha(float alpha);
+
 	inline int ColumnCount() const {return _columnCount;}
 	inline int RowCount() const {return _rowCount;}
 

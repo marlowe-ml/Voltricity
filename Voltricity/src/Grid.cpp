@@ -9,7 +9,6 @@ _currentPieceCellPosition(sf::Vector2i(0,0))
 
 }
 
-
 void Grid::HardDropCurrentPiece() {
 	while (MoveCurrentPieceBy(0, 1))
 		;
@@ -120,7 +119,12 @@ void Grid::Render(sf::RenderTarget& target) const {
 	outlineRect.EnableFill(false);
 	target.Draw(outlineRect);
 
+	target.Draw(_ghostPiece);
+	
 	target.Draw(_currentPiece);
+	
+	
+
 
 	// draw blocks
 	BlockContainer::Render(target);	
@@ -129,25 +133,51 @@ void Grid::Render(sf::RenderTarget& target) const {
 
 void Grid::SetCurrentPiece(const Piece piece) {	
 	_currentPiece = piece;
+	_ghostPiece = piece;
+	_ghostPiece.SetAlpha(100);
 }
 
 bool Grid::MoveCurrentPieceBy(int cellXDelta, int cellYDelta) {
 	return MoveCurrentPieceTo(_currentPieceCellPosition.x + cellXDelta, _currentPieceCellPosition.y + cellYDelta);
 }
 
-bool Grid::MoveCurrentPieceTo(int cellX, int cellY) {
-	if (!isValidPositionForCurrentPiece(cellX, cellY))
+bool Grid::MoveCurrentPieceTo(int cellX, int cellY) {	
+
+	if (doMovePieceTo(cellX, cellY, _currentPiece)) {
+		_currentPieceCellPosition = sf::Vector2i(cellX, cellY);
+		onCurrentPiecePositionOrRotationChanged(_currentPieceCellPosition, game::Direction::none);
+		return true;
+	}
+
+	return false;
+}
+
+void Grid::onCurrentPiecePositionOrRotationChanged(const sf::Vector2i newPos, const game::Direction::e rotationDir) {
+	if (rotationDir != game::Direction::none)
+		_ghostPiece.Rotate(rotationDir);
+
+	doMovePieceTo(newPos.x, newPos.y, _ghostPiece);
+
+	// soft drop simulation for ghost piece to have it hover on the bottom
+	int offset = 1;
+	while (doMovePieceTo(newPos.x, newPos.y + offset, _ghostPiece))
+		offset++;
+}
+
+
+bool Grid::doMovePieceTo(int cellX, int cellY, Piece& piece) {
+	if (!isValidPositionForPiece(cellX, cellY, piece))
 		return false;
 
-	_currentPieceCellPosition = sf::Vector2i(cellX, cellY);
 
 	sf::Vector2f pixelPos = cellToGridPosInPx(cellX, cellY);
 	// account for double block gap when positioning the piece
 	pixelPos.x -= _blockGap;
 	pixelPos.y -= _blockGap;
-	_currentPiece.SetPosition(pixelPos);
+	piece.SetPosition(pixelPos);
 
 	return true;
+
 }
 
 bool Grid::RotateCurrentPiece(game::Direction::e dir) {
@@ -156,12 +186,14 @@ bool Grid::RotateCurrentPiece(game::Direction::e dir) {
 
 	_currentPiece.Rotate(dir);
 
-	if (!isValidPositionForCurrentPiece(_currentPieceCellPosition.x, _currentPieceCellPosition.y)) {
+	if (!isValidPositionForPiece(_currentPieceCellPosition.x, _currentPieceCellPosition.y, _currentPiece)) {
 		// rotate and move back to original rot/pos
 		MoveCurrentPieceTo(originalPos.x, originalPos.y);
 		_currentPiece.Rotate(inverseDir);
 		return false;		
 	}
+
+	onCurrentPiecePositionOrRotationChanged(_currentPieceCellPosition, dir);
 
 	return true;
 }
@@ -184,13 +216,13 @@ void Grid::AttachCurrentPieceBlocksToGrid(bool switchOnOff) {
 	}
 }
 
-bool Grid::isValidPositionForCurrentPiece(int cellX, int cellY) const {
-	int pieceCols = _currentPiece.GetCurrentFrame().ColumnCount();
-	int pieceRows = _currentPiece.GetCurrentFrame().RowCount();
+bool Grid::isValidPositionForPiece(int cellX, int cellY, Piece& piece) const {
+	int pieceCols = piece.GetCurrentFrame().ColumnCount();
+	int pieceRows = piece.GetCurrentFrame().RowCount();
 
 	for (int x=0; x<pieceCols; x++) {
 		for (int y=0; y<pieceRows; y++) {
-			if (_currentPiece.GetCurrentFrame().HasBlockAt(x,y)) {
+			if (piece.GetCurrentFrame().HasBlockAt(x,y)) {
 				if (!isValidPosition(cellX + x, cellY + y) || HasBlockAt(cellX + x, cellY + y))
 					return false;
 			}

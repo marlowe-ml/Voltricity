@@ -41,6 +41,12 @@ void Piece::SetBlockSize(sf::Vector2f size) {
 	}
 }
 
+void Piece::SetAlpha(float alpha) {
+	for (unsigned int i=0; i < _frames.size(); i++) {
+		_frames[i].SetAlpha(alpha);
+	}	
+}
+
 void Piece::AddFrame(PieceFrame frame) {
 	frame.SetBlockSize(_blockSize);
 	_frames.push_back(frame);
