@@ -3,10 +3,10 @@
 
 using namespace volt;
 
-Piece::Piece(sf::Vector2f blockSize) : _currentFrameIndex(0), _blockSize(blockSize) {
+Piece::Piece(sf::Vector2f blockSize) : _currentFrameIndex(0), _blockSize(blockSize), _pieceType(PieceType::none) {
 }
 
-Piece::Piece() : _currentFrameIndex(0), _blockSize(GameSettings::BlockSize) {
+Piece::Piece() : _currentFrameIndex(0), _blockSize(GameSettings::BlockSize), _pieceType(PieceType::none) {
 }
 
 PieceType::e Piece::GetPieceType() const {

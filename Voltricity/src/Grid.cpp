@@ -137,6 +137,10 @@ void Grid::SetCurrentPiece(const Piece piece) {
 	_ghostPiece.SetAlpha(100);
 }
 
+Piece Grid::GetCurrentPiece() {
+	return _currentPiece;
+}
+
 bool Grid::MoveCurrentPieceBy(int cellXDelta, int cellYDelta) {
 	return MoveCurrentPieceTo(_currentPieceCellPosition.x + cellXDelta, _currentPieceCellPosition.y + cellYDelta);
 }

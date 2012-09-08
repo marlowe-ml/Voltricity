@@ -16,6 +16,8 @@ public:
 	virtual void Render(sf::RenderTarget& target) const;
 
 	void SetCurrentPiece(const Piece piece);
+	Piece GetCurrentPiece();
+
 	bool MoveCurrentPieceTo(int cellX, int cellY);
 	bool MoveCurrentPieceBy(int cellXDelta, int cellYDelta);
 

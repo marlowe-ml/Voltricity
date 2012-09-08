@@ -30,7 +30,6 @@ protected:
 
 private:
 	GameMechanics _gameMechanics;
-	Grid _grid;
 
 	game::Label _labelLevel;
 	game::Label _labelLevelDigits;
@@ -40,7 +39,8 @@ private:
 
 	game::Label _labelNext;
 
-	PieceQueue _pieceQueue;
+	// todo: whenever the hold piece is changed, this position has to be re-set. Instead use a class for a holdpiece drawable which can only hold a piece or no piece and never changes position
+	sf::Vector2f _holdPiecePos;
 
 	void alignLabels();
 };

@@ -20,7 +20,7 @@ void GameScreen::NextPieceSpawned(const Piece& nextPiece) {
 }
 
 GameScreen::GameScreen() 
-: _grid(10, 22), _pieceQueue(4), _gameMechanics(_grid, _pieceQueue)
+: _gameMechanics()
 {
 	_gameMechanics.SetGameEventListener(this);
 }
@@ -68,6 +68,10 @@ void GameScreen::handleEvent(const sf::Event& e) {
 			case sf::Key::Space:
 				_gameMechanics.ProcessHardDropCommand_Release();
 				break;
+			case sf::Key::LShift:
+			case sf::Key::RShift:
+				_gameMechanics.SwapHoldPieceWithCurrent();
+				break;
 		}
 
 	}
@@ -86,38 +90,47 @@ void GameScreen::update() {
 
 void GameScreen::present() {
 	_app->Clear(sf::Color(0,0,0));
-	_app->Draw(_grid);
+	_app->Draw(_gameMechanics.GetGrid());
 	_app->Draw(_labelLevel);
 	_app->Draw(_labelLevelDigits);
 	_app->Draw(_labelScore);
 	_app->Draw(_labelScoreDigits);
 	_app->Draw(_labelNext);
-	_app->Draw(_pieceQueue);
+	_app->Draw(_gameMechanics.GetPieceQueue());
+	_app->Draw(_gameMechanics.GetHoldPieceQueue());
 }
 
 int GameScreen::onInit() {
-	game::ScreenManager::GetLayout().AlignDrawable(_grid, _grid.GetSize(), game::Direction::center);
+	Grid& grid = _gameMechanics.GetGrid();
+
+	game::ScreenManager::GetLayout().AlignDrawable(grid, grid.GetSize(), game::Direction::center);
 	alignLabels();
 
-	
-	float pieceQueueOffset_x = (_labelNext.GetSize().x - _pieceQueue.GetSize().x) / 2;
-	_pieceQueue.SetPosition(_labelNext.GetPosition().x + pieceQueueOffset_x, _labelNext.GetPosition().y + 20);
+	PieceQueue& pieceQueue = _gameMechanics.GetPieceQueue();	
+	float pieceQueueOffset_x = (_labelNext.GetSize().x - pieceQueue.GetSize().x) / 2;
+	pieceQueue.SetPosition(_labelNext.GetPosition().x + pieceQueueOffset_x, _labelNext.GetPosition().y + 20);
+
+	// align hold piece
+	PieceQueue& holdPieceQueue = _gameMechanics.GetHoldPieceQueue();	
+	holdPieceQueue.SetPosition(pieceQueue.GetPosition().x - holdPieceQueue.GetSize().x - 10, pieceQueue.GetPosition().y);
+
 
 	_gameMechanics.StartNewGame(_activeScreenTime);
-
 
 	return EXIT_SUCCESS;
 }
 
 void GameScreen::alignLabels() {
-	sf::Vector2f gridTopRight = sf::Vector2f(_grid.GetPosition().x + _grid.GetSize().x, _grid.GetPosition().y);
+	Grid& grid = _gameMechanics.GetGrid();
 
-	sf::FloatRect eastRect = sf::FloatRect(gridTopRight.x, gridTopRight.y, game::ScreenManager::GetLayout().GetRect().Right, _grid.GetPosition().y + _grid.GetSize().y);
+	sf::Vector2f gridTopRight = sf::Vector2f(grid.GetPosition().x + grid.GetSize().x, grid.GetPosition().y);
+
+	sf::FloatRect eastRect = sf::FloatRect(gridTopRight.x, gridTopRight.y, game::ScreenManager::GetLayout().GetRect().Right, grid.GetPosition().y + grid.GetSize().y);
 
 	game::Layout eastSection = game::Layout(eastRect);
 
 	_labelLevel = game::Label(sf::String("Voltage", game::ResourceManager::GetFont(), 20));
-	_labelLevel.SetPosition(_grid.GetPosition().x + _grid.GetSize().x + 10, _grid.GetPosition().y);
+	_labelLevel.SetPosition(grid.GetPosition().x + grid.GetSize().x + 10, grid.GetPosition().y);
 
 	_labelLevelDigits = game::Label(sf::String("0", game::ResourceManager::GetFont(), 20));
 	_labelLevelDigits.SetPosition(_labelLevel.GetPosition().x, _labelLevel.GetPosition().y + _labelLevel.GetSize().y);
@@ -130,5 +143,5 @@ void GameScreen::alignLabels() {
 	_labelScoreDigits.SetPosition(_labelScore.GetPosition().x, _labelScore.GetPosition().y + _labelScore.GetSize().y);
 
 	_labelNext = game::Label(sf::String("Next", game::ResourceManager::GetFont(), 20));
-	_labelNext.SetPosition(_grid.GetPosition().x - _labelNext.GetSize().x - 10, _grid.GetPosition().y);
+	_labelNext.SetPosition(grid.GetPosition().x - _labelNext.GetSize().x - 10, grid.GetPosition().y);
 }

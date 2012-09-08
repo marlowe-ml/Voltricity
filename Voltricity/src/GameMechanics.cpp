@@ -10,17 +10,49 @@ const game::ClockSecond GameMechanics::FULL_DROP_INTERVAL = game::ClockSecond(1.
 const int GameMechanics::ROWS_PER_LEVEL = 1;
 // todo: add repeat initial delay
 
-GameMechanics::GameMechanics(Grid& grid, PieceQueue& pieceQueue) : _grid(grid), _pieceQueue(pieceQueue),
+GameMechanics::GameMechanics() : _grid(10, 22), _pieceQueue(4), _holdPieceQueue(1),
 _automaticDropMove(game::Direction::bottom, FULL_DROP_INTERVAL), 
 _manualDropMove(game::Direction::bottom, game::ClockSecond(0.075)),
 _horizontalMove(game::Direction::none, game::ClockSecond(0.08)),
 _rotationMove(game::Direction::none, game::ClockSecond(0.15)),
 _allowHardDrop(true), _gameEventListener(NULL)
-{}
+{
+}
+
+
+void GameMechanics::SwapHoldPieceWithCurrent() {
+	// todo: do not allow re-swap of a hold piece, once swapped
+
+	PieceType::e currentPieceType = _grid.GetCurrentPiece().GetPieceType();
+
+	Piece holdPiece = _holdPieceQueue.PushNewPiece(_pieceFactory.CreatePiece(currentPieceType, GameSettings::BlockSizeForQueue));
+
+	PieceType::e holdPieceType = holdPiece.GetPieceType();
+	
+	if (holdPieceType == PieceType::none) {
+		// no hold piece present yet
+		spawnNextPieceFromQueue();
+	} else {
+		spawnSpecificPiece(holdPieceType);
+	}
+}
 
 void GameMechanics::SetGameEventListener(IGameEventListener* listener) {
 	_gameEventListener = listener;
 }
+
+Grid& GameMechanics::GetGrid() {
+	return _grid;
+}
+
+PieceQueue& GameMechanics::GetPieceQueue() {
+	return _pieceQueue;
+}
+
+PieceQueue& GameMechanics::GetHoldPieceQueue() {
+	return _holdPieceQueue;
+}
+
 
 void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 	_level = 0;
@@ -33,7 +65,7 @@ void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 		_pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece(GameSettings::BlockSizeForQueue));			
 	}
 
-	spawnNextPiece();
+	spawnNextPieceFromQueue();
 }
 
 
@@ -164,18 +196,21 @@ void GameMechanics::movePiece(game::Direction::e direction, int units) {
 
 }
 
-
-void GameMechanics::spawnNextPiece() {
-	Piece nextFromQueue = _pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece(GameSettings::BlockSizeForQueue));
-	
-	Piece nextPiece = _pieceFactory.CreatePiece(nextFromQueue.GetPieceType());
-	 nextPiece.SetPosition(sf::Vector2f(0,0));
+void GameMechanics::spawnSpecificPiece(PieceType::e pieceType) {
+	Piece nextPiece = _pieceFactory.CreatePiece(pieceType);
+	nextPiece.SetPosition(sf::Vector2f(0,0));
 
 	_grid.SetCurrentPiece(nextPiece);
 	_grid.MoveCurrentPieceTo(0,0);
 	_automaticDropMove.Stop();
 
 	_gameEventListener->NextPieceSpawned(nextPiece);
+}
+
+void GameMechanics::spawnNextPieceFromQueue() {
+	Piece nextFromQueue = _pieceQueue.PushNewPiece(_pieceFactory.CreateRandomPiece(GameSettings::BlockSizeForQueue));
+	
+	spawnSpecificPiece(nextFromQueue.GetPieceType());
 }
 
 void GameMechanics::hardDrop() {
@@ -196,7 +231,7 @@ void GameMechanics::onPieceDropBottom() {
 
 	onRowsCompleted(completedRows.size());
 
-	spawnNextPiece();
+	spawnNextPieceFromQueue();
 }
 
 void GameMechanics::onRowsCompleted(int numRows) {

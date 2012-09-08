@@ -13,7 +13,7 @@ namespace volt {
 class GameMechanics {
 
 public:
-	GameMechanics(Grid& grid, PieceQueue& pieceQueue);
+	GameMechanics();
 	void SetGameEventListener(IGameEventListener* listener);
 	void AdvanceGame(game::ClockTick activeScreenTime);
 	void StartNewGame(game::ClockTick activeScreenTime);
@@ -25,8 +25,15 @@ public:
 	void ProcessHardDropCommand_Release();
 	int GetLevel() const;
 
+	Grid& GetGrid();
+	PieceQueue& GetPieceQueue();
+	PieceQueue& GetHoldPieceQueue();
+
+	void SwapHoldPieceWithCurrent();
+
 private:
-	void spawnNextPiece();
+	void spawnSpecificPiece(PieceType::e pieceType);
+	void spawnNextPieceFromQueue();
 
 	void movePiece(game::Direction::e direction, int units);
 	void hardDrop();
@@ -37,8 +44,10 @@ private:
 	static const game::ClockSecond FULL_DROP_INTERVAL;
 	static const int ROWS_PER_LEVEL;
 
-	Grid& _grid;
-	PieceQueue& _pieceQueue;
+	Grid _grid;
+	PieceQueue _pieceQueue;
+	PieceQueue _holdPieceQueue;
+
 	PieceFactory _pieceFactory;
 	bool _allowHardDrop;
 	game::ClockTick _activeScreenTime;
