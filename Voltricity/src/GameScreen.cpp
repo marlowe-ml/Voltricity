@@ -70,7 +70,7 @@ void GameScreen::handleEvent(const sf::Event& e) {
 				break;
 			case sf::Key::LShift:
 			case sf::Key::RShift:
-				_gameMechanics.SwapHoldPieceWithCurrent();
+				_gameMechanics.ProcessHoldPieceSwapCommand_Release();
 				break;
 		}
 

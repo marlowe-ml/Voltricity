@@ -23,13 +23,12 @@ public:
 	void ProcessMoveCommand_Release(game::Direction::e direction);
 	void ProcessRotationCommand_Release(game::Direction::e direction);
 	void ProcessHardDropCommand_Release();
+	void ProcessHoldPieceSwapCommand_Release();
 	int GetLevel() const;
 
 	Grid& GetGrid();
 	PieceQueue& GetPieceQueue();
 	PieceQueue& GetHoldPieceQueue();
-
-	void SwapHoldPieceWithCurrent();
 
 private:
 	void spawnSpecificPiece(PieceType::e pieceType);
@@ -50,6 +49,7 @@ private:
 
 	PieceFactory _pieceFactory;
 	bool _allowHardDrop;
+	bool _holdPieceInUse;
 	game::ClockTick _activeScreenTime;
 
 	IntervalMove _automaticDropMove;

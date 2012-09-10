@@ -15,27 +15,10 @@ _automaticDropMove(game::Direction::bottom, FULL_DROP_INTERVAL),
 _manualDropMove(game::Direction::bottom, game::ClockSecond(0.075)),
 _horizontalMove(game::Direction::none, game::ClockSecond(0.08)),
 _rotationMove(game::Direction::none, game::ClockSecond(0.15)),
-_allowHardDrop(true), _gameEventListener(NULL)
+_allowHardDrop(true), _holdPieceInUse(false), _gameEventListener(NULL)
 {
 }
 
-
-void GameMechanics::SwapHoldPieceWithCurrent() {
-	// todo: do not allow re-swap of a hold piece, once swapped
-
-	PieceType::e currentPieceType = _grid.GetCurrentPiece().GetPieceType();
-
-	Piece holdPiece = _holdPieceQueue.PushNewPiece(_pieceFactory.CreatePiece(currentPieceType, GameSettings::BlockSizeForQueue));
-
-	PieceType::e holdPieceType = holdPiece.GetPieceType();
-	
-	if (holdPieceType == PieceType::none) {
-		// no hold piece present yet
-		spawnNextPieceFromQueue();
-	} else {
-		spawnSpecificPiece(holdPieceType);
-	}
-}
 
 void GameMechanics::SetGameEventListener(IGameEventListener* listener) {
 	_gameEventListener = listener;
@@ -51,6 +34,10 @@ PieceQueue& GameMechanics::GetPieceQueue() {
 
 PieceQueue& GameMechanics::GetHoldPieceQueue() {
 	return _holdPieceQueue;
+}
+
+int GameMechanics::GetLevel() const {
+	return _level;
 }
 
 
@@ -156,9 +143,27 @@ void GameMechanics::ProcessHardDropCommand_Release() {
 	_allowHardDrop = true;
 }
 
-int GameMechanics::GetLevel() const {
-	return _level;
+
+void GameMechanics::ProcessHoldPieceSwapCommand_Release() {
+	if (_holdPieceInUse)
+		return;
+
+	_holdPieceInUse = true;
+
+	PieceType::e currentPieceType = _grid.GetCurrentPiece().GetPieceType();
+
+	Piece holdPiece = _holdPieceQueue.PushNewPiece(_pieceFactory.CreatePiece(currentPieceType, GameSettings::BlockSizeForQueue));
+
+	PieceType::e holdPieceType = holdPiece.GetPieceType();
+
+	if (holdPieceType == PieceType::none) {
+		// no hold piece present yet
+		spawnNextPieceFromQueue();
+	} else {
+		spawnSpecificPiece(holdPieceType);
+	}
 }
+
 
 void GameMechanics::movePiece(game::Direction::e direction, int units) {
 	int step = (direction == game::Direction::left) ? -1 : 1;
@@ -223,6 +228,8 @@ void GameMechanics::hardDrop() {
 }
 
 void GameMechanics::onPieceDropBottom() {
+	_holdPieceInUse = false;
+	
 	// hit the bottom - attach piece and spawn next
 	_grid.AttachCurrentPieceBlocksToGrid(true);
 	std::vector<int> completedRows = _grid.GetCompletedRows();
