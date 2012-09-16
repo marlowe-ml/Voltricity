@@ -118,6 +118,7 @@ void GameMechanics::ProcessRotationCommand(game::Direction::e direction) {
 	if (!_rotationMove.IsStarted() || _rotationMove.GetDirection() != direction) {
 		_rotationMove.StartInDirection(_activeScreenTime, direction);
 
+		// try to rotate immediately
 		if (!_grid.RotateCurrentPiece(direction)) {
 			// encountered resistance
 			_rotationMove.Pause(_activeScreenTime);

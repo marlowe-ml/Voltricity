@@ -184,13 +184,36 @@ bool Grid::doMovePieceTo(int cellX, int cellY, Piece& piece) {
 
 }
 
+
+bool Grid::tryMoveCurrentPieceBy(int xOffset, int yOffset) {
+	if (isValidPositionForPiece(_currentPieceCellPosition.x + xOffset, _currentPieceCellPosition.y + yOffset, _currentPiece)) {
+		MoveCurrentPieceBy(xOffset, 0);
+		return true;
+	}
+	return false;
+}
+
+bool Grid::findValidPositionAfterRotation(game::Direction::e dir) {
+
+	int xOffset = dir == game::Direction::left ? -1 : 1;
+	
+	return 
+		tryMoveCurrentPieceBy(0, 0) ||				// actual start position after rotation
+		tryMoveCurrentPieceBy(xOffset, 0) ||		// horizontal in prioritized direction
+		tryMoveCurrentPieceBy(xOffset*-1, 0) ||		// horizontal in opposite direction
+		tryMoveCurrentPieceBy(0, 1) ||				// one down
+		tryMoveCurrentPieceBy(xOffset, 1) ||		// horizontal in prioritized direction + down
+		tryMoveCurrentPieceBy(xOffset*-1, 1) ||		// horizontal in opposite direction + down
+		tryMoveCurrentPieceBy(0, -1);				// one up / floor kick
+}
+
 bool Grid::RotateCurrentPiece(game::Direction::e dir) {
 	game::Direction::e inverseDir = (dir == game::Direction::left) ? game::Direction::right : game::Direction::left;
 	sf::Vector2i originalPos = _currentPieceCellPosition;
 
 	_currentPiece.Rotate(dir);
 
-	if (!isValidPositionForPiece(_currentPieceCellPosition.x, _currentPieceCellPosition.y, _currentPiece)) {
+	if (!findValidPositionAfterRotation(dir)) {
 		// rotate and move back to original rot/pos
 		MoveCurrentPieceTo(originalPos.x, originalPos.y);
 		_currentPiece.Rotate(inverseDir);
