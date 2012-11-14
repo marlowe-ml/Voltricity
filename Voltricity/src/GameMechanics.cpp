@@ -15,7 +15,7 @@ _automaticDropMove(game::Direction::bottom, FULL_DROP_INTERVAL),
 _manualDropMove(game::Direction::bottom, game::ClockSecond(0.075)),
 _horizontalMove(game::Direction::none, game::ClockSecond(0.08)),
 _rotationMove(game::Direction::none, game::ClockSecond(0.15)),
-_allowHardDrop(true), _holdPieceInUse(false), _gameEventListener(NULL)
+_allowHardDrop(true), _holdPieceInUse(false), _gameEventListener(NULL), _isPaused(false)
 {
 }
 
@@ -41,11 +41,14 @@ int GameMechanics::GetLevel() const {
 }
 
 
+
 void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 	_level = 0;
 	_score = 0;
 	_rowsToNextLevel = ROWS_PER_LEVEL;
 
+	_isPaused = false;
+	_timeAccumultor.Reset();
 	
 	int maxPieces = _pieceQueue.GetMaxPieces();
 	for (int i=0; i<maxPieces; i++) {
@@ -57,7 +60,10 @@ void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 
 
 void GameMechanics::AdvanceGame(game::ClockTick activeScreenTime) {
-	_activeScreenTime = activeScreenTime;
+	_timeAccumultor.AccumulateElapsedTime(activeScreenTime);
+
+	_activeScreenTime = _timeAccumultor.GetAccumulatedTime();
+	
 
 	int moveDistance = 0;
 
@@ -88,6 +94,10 @@ void GameMechanics::AdvanceGame(game::ClockTick activeScreenTime) {
 			moveDistance--;
 		}
 	}
+}
+
+void GameMechanics::PauseGame(game::ClockTick activeScreenTime) {
+	_isPaused = true;
 }
 
 void GameMechanics::ProcessMoveCommand(game::Direction::e direction) {

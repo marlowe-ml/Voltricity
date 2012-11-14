@@ -7,6 +7,7 @@
 #include "Grid.h"
 #include "Label.h"
 #include "PieceQueue.h"
+#include "MainMenu.h"
 
 namespace volt {
 
@@ -39,8 +40,9 @@ private:
 
 	game::Label _labelNext;
 
-	// todo: whenever the hold piece is changed, this position has to be re-set. Instead use a class for a holdpiece drawable which can only hold a piece or no piece and never changes position
 	sf::Vector2f _holdPiecePos;
+
+	MainMenu _mainMenu;
 
 	void alignLabels();
 };

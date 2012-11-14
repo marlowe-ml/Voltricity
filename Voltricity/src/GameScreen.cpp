@@ -98,6 +98,8 @@ void GameScreen::present() {
 	_app->Draw(_labelNext);
 	_app->Draw(_gameMechanics.GetPieceQueue());
 	_app->Draw(_gameMechanics.GetHoldPieceQueue());
+	//if (_gameMechanics.IsPaused())
+		//_app->Draw(_mainMenu);
 }
 
 int GameScreen::onInit() {

@@ -6,6 +6,7 @@
 #include "IntervalMove.h"
 #include "IGameEventListener.h"
 #include "PieceQueue.h"
+#include "TimeAccumulator.h"
 
 namespace volt {
 
@@ -17,6 +18,8 @@ public:
 	void SetGameEventListener(IGameEventListener* listener);
 	void AdvanceGame(game::ClockTick activeScreenTime);
 	void StartNewGame(game::ClockTick activeScreenTime);
+	void PauseGame(game::ClockTick activeScreenTime);
+
 	void ProcessMoveCommand(game::Direction::e direction);
 	void ProcessRotationCommand(game::Direction::e direction);
 	void ProcessHardDropCommand();
@@ -24,8 +27,8 @@ public:
 	void ProcessRotationCommand_Release(game::Direction::e direction);
 	void ProcessHardDropCommand_Release();
 	void ProcessHoldPieceSwapCommand_Release();
-	int GetLevel() const;
 
+	int GetLevel() const;
 	Grid& GetGrid();
 	PieceQueue& GetPieceQueue();
 	PieceQueue& GetHoldPieceQueue();
@@ -51,6 +54,7 @@ private:
 	bool _allowHardDrop;
 	bool _holdPieceInUse;
 	game::ClockTick _activeScreenTime;
+	game::TimeAccumulator _timeAccumultor;
 
 	IntervalMove _automaticDropMove;
 	IntervalMove _manualDropMove;
@@ -60,6 +64,8 @@ private:
 	int _level;
 	int _rowsToNextLevel;
 	int _score;
+
+	bool _isPaused;
 
 	IGameEventListener* _gameEventListener;
 	

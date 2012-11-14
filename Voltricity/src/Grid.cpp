@@ -196,7 +196,7 @@ bool Grid::tryMoveCurrentPieceBy(int xOffset, int yOffset) {
 bool Grid::findValidPositionAfterRotation(game::Direction::e dir) {
 
 	int xOffset = dir == game::Direction::left ? -1 : 1;
-	
+	// todo: add unit tests for scenarios
 	return 
 		tryMoveCurrentPieceBy(0, 0) ||				// actual start position after rotation
 		tryMoveCurrentPieceBy(xOffset, 0) ||		// horizontal in prioritized direction
