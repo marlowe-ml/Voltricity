@@ -60,35 +60,38 @@ void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 
 
 void GameMechanics::AdvanceGame(game::ClockTick activeScreenTime) {
+	if (_isPaused)
+		return;
+
 	_timeAccumultor.AccumulateElapsedTime(activeScreenTime);
 
-	_activeScreenTime = _timeAccumultor.GetAccumulatedTime();
+	_activeGameTime = _timeAccumultor.GetAccumulatedTime();
 	
 
 	int moveDistance = 0;
 
 	if (!_automaticDropMove.IsStarted() && !_automaticDropMove.IsPaused())
-		_automaticDropMove.Start(_activeScreenTime);
+		_automaticDropMove.Start(_activeGameTime);
 
-	moveDistance = _automaticDropMove.DistanceUnitsSinceLastMove(_activeScreenTime);
+	moveDistance = _automaticDropMove.DistanceUnitsSinceLastMove(_activeGameTime);
 	movePiece(_automaticDropMove.GetDirection(), moveDistance);
 
 	if (_horizontalMove.IsStarted()) {
-		moveDistance = _horizontalMove.DistanceUnitsSinceLastMove(_activeScreenTime);
+		moveDistance = _horizontalMove.DistanceUnitsSinceLastMove(_activeGameTime);
 		movePiece(_horizontalMove.GetDirection(), moveDistance);
 	}
 
 	if (_manualDropMove.IsStarted()) {
-		moveDistance = _manualDropMove.DistanceUnitsSinceLastMove(_activeScreenTime);
+		moveDistance = _manualDropMove.DistanceUnitsSinceLastMove(_activeGameTime);
 		movePiece(_manualDropMove.GetDirection(), moveDistance);
 	}
 
 	if (_rotationMove.IsStarted()) {
-		moveDistance = _rotationMove.DistanceUnitsSinceLastMove(_activeScreenTime);
+		moveDistance = _rotationMove.DistanceUnitsSinceLastMove(_activeGameTime);
 		while (moveDistance > 0) {
 			if (!_grid.RotateCurrentPiece(_rotationMove.GetDirection())) {
 				// rotation blocked
-				_rotationMove.Pause(_activeScreenTime);
+				_rotationMove.Pause(_activeGameTime);
 			}
 
 			moveDistance--;
@@ -98,26 +101,42 @@ void GameMechanics::AdvanceGame(game::ClockTick activeScreenTime) {
 
 void GameMechanics::PauseGame(game::ClockTick activeScreenTime) {
 	_isPaused = true;
+	_timeAccumultor.Pause(activeScreenTime);
 }
 
+void GameMechanics::ResumeGame(game::ClockTick activeScreenTime) {
+	_isPaused = false;
+}
+
+bool GameMechanics::IsPaused() const {
+	return _isPaused;
+}
+
+
 void GameMechanics::ProcessMoveCommand(game::Direction::e direction) {
+	if (_isPaused)
+		return;
+
 	IntervalMove& affectedMove = (direction ==  game::Direction::bottom) ? _manualDropMove : _horizontalMove;
 
 	if (direction == game::Direction::bottom)
 		if (!_automaticDropMove.IsPaused())
-			_automaticDropMove.Pause(_activeScreenTime);
+			_automaticDropMove.Pause(_activeGameTime);
 
 	if (!affectedMove.IsStarted() || affectedMove.GetDirection() != direction) {
-		affectedMove.StartInDirection(_activeScreenTime, direction);
+		affectedMove.StartInDirection(_activeGameTime, direction);
 		movePiece(direction, 1);	// move by one immediately
 	}
 }
 
 void GameMechanics::ProcessMoveCommand_Release(game::Direction::e direction) {
+	if (_isPaused)
+		return;
+
 	if (direction == game::Direction::bottom) {
 		if (_manualDropMove.IsStarted()) {
 			_manualDropMove.Stop();
-			_automaticDropMove.Resume(_activeScreenTime);
+			_automaticDropMove.Resume(_activeGameTime);
 		}
 	} else if (_horizontalMove.IsStarted() && _horizontalMove.GetDirection() == direction) {
 		_horizontalMove.Stop();
@@ -125,24 +144,33 @@ void GameMechanics::ProcessMoveCommand_Release(game::Direction::e direction) {
 }
 
 void GameMechanics::ProcessRotationCommand(game::Direction::e direction) {
+	if (_isPaused)
+		return;
+
 	if (!_rotationMove.IsStarted() || _rotationMove.GetDirection() != direction) {
-		_rotationMove.StartInDirection(_activeScreenTime, direction);
+		_rotationMove.StartInDirection(_activeGameTime, direction);
 
 		// try to rotate immediately
 		if (!_grid.RotateCurrentPiece(direction)) {
 			// encountered resistance
-			_rotationMove.Pause(_activeScreenTime);
+			_rotationMove.Pause(_activeGameTime);
 		}
 	}
 }
 
 void GameMechanics::ProcessRotationCommand_Release(game::Direction::e direction) {
+	if (_isPaused)
+		return;
+
 	if (_rotationMove.IsStarted() && _rotationMove.GetDirection() == direction) {
 		_rotationMove.Stop();
 	}				
 }
 
 void GameMechanics::ProcessHardDropCommand() {
+	if (_isPaused)
+		return;
+
 	if (_allowHardDrop) {
 		hardDrop();
 		_allowHardDrop = false;
@@ -151,11 +179,17 @@ void GameMechanics::ProcessHardDropCommand() {
 
 
 void GameMechanics::ProcessHardDropCommand_Release() {
+	if (_isPaused)
+		return;
+
 	_allowHardDrop = true;
 }
 
 
 void GameMechanics::ProcessHoldPieceSwapCommand_Release() {
+	if (_isPaused)
+		return;
+
 	if (_holdPieceInUse)
 		return;
 
@@ -186,10 +220,10 @@ void GameMechanics::movePiece(game::Direction::e direction, int units) {
 	{
 		// blocked or not on downwards movement, the row will change (spawn new on first row or drop one row)
 		if (_horizontalMove.IsPaused())
-			_horizontalMove.Resume(_activeScreenTime);
+			_horizontalMove.Resume(_activeGameTime);
 
 		if (_rotationMove.IsPaused())
-			_rotationMove.Resume(_activeScreenTime);
+			_rotationMove.Resume(_activeGameTime);
 	}
 
 	while (units > 0) {
@@ -204,7 +238,7 @@ void GameMechanics::movePiece(game::Direction::e direction, int units) {
 				onPieceDropBottom();
 			} else {
 				// encountered resistance on horizontal level - hold movement
-				_horizontalMove.Pause(_activeScreenTime);
+				_horizontalMove.Pause(_activeGameTime);
 			}
 		}
 		units--;

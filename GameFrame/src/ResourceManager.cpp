@@ -9,7 +9,7 @@ ImageLookup ResourceManager::_imageLookup;
 // todo: consider a generic resource lookup which can return any resource by name, e.g. one lookup per resource type
 
 void ResourceManager::Init(sf::RenderWindow& app) {
-	ResourceManager::_font.LoadFromFile("Arial.ttf");
+	ResourceManager::_font = sf::Font::GetDefaultFont();
 	_app = &app;
 }
 

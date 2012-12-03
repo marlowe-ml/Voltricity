@@ -27,6 +27,18 @@ GameScreen::GameScreen()
 
 void GameScreen::handleEvent(const sf::Event& e) {
 	if (e.Type == sf::Event::KeyPressed) {
+		
+		if (_gameMechanics.IsPaused()) {
+			if (e.Key.Code == sf::Key::Escape) {
+				_gameMechanics.ResumeGame(_activeScreenTime);
+				return;
+			}
+
+			// _mainMenu.handleKeyPress();
+			
+			return;
+		}
+
 		switch(e.Key.Code) {
 			case sf::Key::Left:
 				_gameMechanics.ProcessMoveCommand(game::Direction::left);
@@ -46,6 +58,10 @@ void GameScreen::handleEvent(const sf::Event& e) {
 			case sf::Key::Space:
 				_gameMechanics.ProcessHardDropCommand();
 				break;
+			case sf::Key::Escape:
+				_gameMechanics.PauseGame(_activeScreenTime);
+				break;
+
 		}
 	} else if (e.Type == sf::Event::KeyReleased) {
 		switch(e.Key.Code) {
@@ -83,12 +99,18 @@ void GameScreen::update() {
 	while(nextEvent(e))
 		handleEvent(e);
 	
-	_gameMechanics.AdvanceGame(_activeScreenTime);
+	if (!_gameMechanics.IsPaused())
+		_gameMechanics.AdvanceGame(_activeScreenTime);
 
 }
 
 
 void GameScreen::present() {
+	if (_gameMechanics.IsPaused()) {
+		_app->Draw(_mainMenu);
+		return;
+	}
+
 	_app->Clear(sf::Color(0,0,0));
 	_app->Draw(_gameMechanics.GetGrid());
 	_app->Draw(_labelLevel);
@@ -98,8 +120,8 @@ void GameScreen::present() {
 	_app->Draw(_labelNext);
 	_app->Draw(_gameMechanics.GetPieceQueue());
 	_app->Draw(_gameMechanics.GetHoldPieceQueue());
-	//if (_gameMechanics.IsPaused())
-		//_app->Draw(_mainMenu);
+
+
 }
 
 int GameScreen::onInit() {

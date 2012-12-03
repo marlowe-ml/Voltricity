@@ -19,6 +19,8 @@ public:
 	void AdvanceGame(game::ClockTick activeScreenTime);
 	void StartNewGame(game::ClockTick activeScreenTime);
 	void PauseGame(game::ClockTick activeScreenTime);
+	void ResumeGame(game::ClockTick activeScreenTime);
+
 
 	void ProcessMoveCommand(game::Direction::e direction);
 	void ProcessRotationCommand(game::Direction::e direction);
@@ -32,6 +34,8 @@ public:
 	Grid& GetGrid();
 	PieceQueue& GetPieceQueue();
 	PieceQueue& GetHoldPieceQueue();
+
+	bool IsPaused() const;
 
 private:
 	void spawnSpecificPiece(PieceType::e pieceType);
@@ -53,7 +57,7 @@ private:
 	PieceFactory _pieceFactory;
 	bool _allowHardDrop;
 	bool _holdPieceInUse;
-	game::ClockTick _activeScreenTime;
+	game::ClockTick _activeGameTime;
 	game::TimeAccumulator _timeAccumultor;
 
 	IntervalMove _automaticDropMove;

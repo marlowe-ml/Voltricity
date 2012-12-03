@@ -21,7 +21,10 @@ Voltricity::~Voltricity() {
 void Voltricity::Run() {
 
 
-	ResourceManager::SetFont("res/Erika Ormig.ttf");
+	ResourceManager::Init(_app);
+
+	//ResourceManager::SetFont("res/Erika Ormig.ttf");
+	//ResourceManager::SetFont("Arial.ttf");
 
 	const int UPDATES_PER_SECOND = 25;
 	const int TICKS_BETWEEN_UPDATES = 1000 / UPDATES_PER_SECOND;
