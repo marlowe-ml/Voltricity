@@ -13,11 +13,11 @@ public:
 
 	MainMenu();
 	virtual void Render(sf::RenderTarget& target) const;
-	void handleEvent(const sf::Event& e);
-	MenuSelection checkLastActivatedButton();
-	bool checkWasClosed();
-	void setInGame(bool val);
-	void selectFirst();	
+	void HandleEvent(const sf::Event& e);
+	MenuSelection CheckLastActivatedButton();
+	bool CheckWasClosed();
+	void SetInGame(bool val);
+	void SelectFirst();	
 
 private:
 	sf::Sprite _logoSprite;
