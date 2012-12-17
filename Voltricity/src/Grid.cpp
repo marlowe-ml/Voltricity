@@ -73,6 +73,15 @@ void Grid::ClearRows(std::vector<int> rows) {
 	}
 }
 
+void Grid::Clear() {
+	for(int row=0; row<_rowCount; row++) {
+		for (int col = 0; col<_columnCount; col++) {
+			RemoveBlockAt(col, row);
+		}
+	}
+}
+
+
 void Grid::moveRows(int rowsStart, int rowsEnd, int amountToMove) {
 	// make sure rows to move don't overwrite each other
 	if (

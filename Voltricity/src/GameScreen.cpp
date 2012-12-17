@@ -29,12 +29,35 @@ void GameScreen::handleEvent(const sf::Event& e) {
 	if (e.Type == sf::Event::KeyPressed) {
 		
 		if (_gameMechanics.IsPaused()) {
-			if (e.Key.Code == sf::Key::Escape) {
+
+			_mainMenu.handleEvent(e);
+
+			if (_mainMenu.checkWasClosed()) {
 				_gameMechanics.ResumeGame(_activeScreenTime);
 				return;
 			}
 
-			// _mainMenu.handleKeyPress();
+
+			MainMenu::MenuSelection menuSelection = _mainMenu.checkLastActivatedButton();
+			switch(menuSelection) {
+				case MainMenu::btnResumeGame:
+					_gameMechanics.ResumeGame(_activeScreenTime);
+					break;
+				case MainMenu::btnNewGame:
+					_gameMechanics.StartNewGame(_activeScreenTime);
+					break;
+				case MainMenu::btnAbout:
+					// todo
+					//ScreenManager::activateScreen("About");
+					break;
+				case MainMenu::btnExit:
+					// todo: confirm exit
+					game::ResourceManager::GetApp()->Close();
+					break;
+
+			}
+
+
 			
 			return;
 		}
@@ -60,6 +83,8 @@ void GameScreen::handleEvent(const sf::Event& e) {
 				break;
 			case sf::Key::Escape:
 				_gameMechanics.PauseGame(_activeScreenTime);
+				_mainMenu.selectFirst();
+				_mainMenu.setInGame(true);	// todo: define and use profiles to determine button sets
 				break;
 
 		}

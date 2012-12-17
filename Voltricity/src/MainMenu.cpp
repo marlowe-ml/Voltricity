@@ -35,7 +35,7 @@ void MainMenu::Render(sf::RenderTarget& target) const {
 	sf::Shape background = sf::Shape::Rectangle(x1, y1, x2, y2, sf::Color(64,0,0,192), 1.0f, sf::Color(255,255,255,128));
 	target.Draw(background);
 	target.Draw(_buttonList);
-	target.Draw(_logoSprite);
+	//target.Draw(_logoSprite);
 }
 
 void MainMenu::handleEvent(const sf::Event& e) {
