@@ -47,8 +47,7 @@ void GameScreen::handleEvent(const sf::Event& e) {
 					_gameMechanics.StartNewGame(_activeScreenTime);
 					break;
 				case MainMenu::btnAbout:
-					// todo
-					//ScreenManager::activateScreen("About");
+					game::ScreenManager::ActivateScreen("About");
 					break;
 				case MainMenu::btnExit:
 					// todo: confirm exit
@@ -173,10 +172,6 @@ void GameScreen::alignLabels() {
 	Grid& grid = _gameMechanics.GetGrid();
 
 	sf::Vector2f gridTopRight = sf::Vector2f(grid.GetPosition().x + grid.GetSize().x, grid.GetPosition().y);
-
-	sf::FloatRect eastRect = sf::FloatRect(gridTopRight.x, gridTopRight.y, game::ScreenManager::GetLayout().GetRect().Right, grid.GetPosition().y + grid.GetSize().y);
-
-	game::Layout eastSection = game::Layout(eastRect);
 
 	_labelLevel = game::Label(sf::String("Voltage", game::ResourceManager::GetFont(), 20));
 	_labelLevel.SetPosition(grid.GetPosition().x + grid.GetSize().x + 10, grid.GetPosition().y);

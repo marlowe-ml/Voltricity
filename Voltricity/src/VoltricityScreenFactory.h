@@ -4,6 +4,7 @@
 #include "Screen.h"
 #include "ScreenFactory.h"
 #include "GameScreen.h"
+#include "AboutScreen.h"
 
 namespace volt {
 
@@ -11,12 +12,15 @@ namespace volt {
 
 	protected:
 		game::Screen* DoCreate(const std::string& screenId) {
-			game::Screen* newScreen = 0;
 
 			if (screenId == "Game")
-				newScreen = new GameScreen();
+				return new GameScreen();
 
-			return newScreen;
+			if (screenId == "About")
+				return new AboutScreen();
+
+
+			return NULL;
 		}
 
 
