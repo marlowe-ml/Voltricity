@@ -3,13 +3,6 @@
 #include "ScreenManager.h"
 #include "ResourceManager.h"
 
-/*
-todo: refactor:
-add listener for each button
-new Command(this, onActivated)
-*/
-
-
 using namespace volt;
 
 MainMenu::MainMenu() : _wasClosed(false), _initialMenu(true) {
@@ -22,7 +15,6 @@ MainMenu::MainMenu() : _wasClosed(false), _initialMenu(true) {
 	// todo:
 	// -- _logoSprite.SetImage(game::ResourceManager::GetImage("logo.png"));
 }
-
 
 void MainMenu::Render(sf::RenderTarget& target) const {
 	sf::Color screenColor = sf::Color(0,0,0,128);
