@@ -31,9 +31,9 @@ void GameScreen::handleEvent(const sf::Event& e) {
 		
 		if (_gameMechanics.IsPaused()) {
 
-			_mainMenu.handleEvent(e);
+			_mainMenu.HandleEvent(e);
 
-			if (_mainMenu.checkWasClosed()) {
+			if (_mainMenu.CheckWasClosed()) {
 				_gameMechanics.ResumeGame(_activeScreenTime);
 			}
 			return;
@@ -60,8 +60,8 @@ void GameScreen::handleEvent(const sf::Event& e) {
 				break;
 			case sf::Key::Escape:
 				_gameMechanics.PauseGame(_activeScreenTime);
-				_mainMenu.selectFirst();
-				_mainMenu.setInGame(true);	// todo: define and use profiles to determine button sets
+				_mainMenu.SelectFirst();
+				_mainMenu.SetInGame(true);	// todo: define and use profiles to determine button sets
 				break;
 
 		}
