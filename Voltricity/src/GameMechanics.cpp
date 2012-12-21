@@ -45,6 +45,12 @@ int GameMechanics::GetLevel() const {
 void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 	_level = 0;
 	_score = 0;
+
+	_gameEventListener->LevelChanged(0, 0);
+	_gameEventListener->ScoreChanged(0, 0);
+
+	_grid.Clear();
+
 	_rowsToNextLevel = ROWS_PER_LEVEL;
 
 	_isPaused = false;

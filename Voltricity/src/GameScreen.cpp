@@ -30,8 +30,10 @@ void GameScreen::handleEvent(const sf::Event& e) {
 	if (e.Type == sf::Event::KeyPressed) {
 		
 		if (_gameMechanics.IsPaused()) {
-			_mainMenu.HandleEvent(e);
-			if (_mainMenu.CheckWasClosed()) {
+
+			_mainMenu.handleEvent(e);
+
+			if (_mainMenu.checkWasClosed()) {
 				_gameMechanics.ResumeGame(_activeScreenTime);
 			}
 			return;
@@ -58,6 +60,8 @@ void GameScreen::handleEvent(const sf::Event& e) {
 				break;
 			case sf::Key::Escape:
 				_gameMechanics.PauseGame(_activeScreenTime);
+				_mainMenu.selectFirst();
+				_mainMenu.setInGame(true);	// todo: define and use profiles to determine button sets
 				break;
 
 		}
@@ -148,10 +152,6 @@ void GameScreen::alignLabels() {
 	Grid& grid = _gameMechanics.GetGrid();
 
 	sf::Vector2f gridTopRight = sf::Vector2f(grid.GetPosition().x + grid.GetSize().x, grid.GetPosition().y);
-
-	sf::FloatRect eastRect = sf::FloatRect(gridTopRight.x, gridTopRight.y, game::ScreenManager::GetLayout().GetRect().Right, grid.GetPosition().y + grid.GetSize().y);
-
-	game::Layout eastSection = game::Layout(eastRect);
 
 	_labelLevel = game::Label(sf::String("Voltage", game::ResourceManager::GetFont(), 20));
 	_labelLevel.SetPosition(grid.GetPosition().x + grid.GetSize().x + 10, grid.GetPosition().y);

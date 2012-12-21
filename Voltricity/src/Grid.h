@@ -31,6 +31,7 @@ public:
 	std::vector<int> getRowsCompletedOrCleared(bool checkCompleted) const;
 	
 	void ClearRows(std::vector<int> rows);
+	void Clear();
 	void CompactClearedRows();
 	void moveRows(int rowsStart, int rowsEnd, int amountToMove);
 
