@@ -1,7 +1,7 @@
 #ifndef Voltricity_h__
 #define Voltricity_h__
 
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 #include "Clock.h"
 
 namespace volt {
@@ -15,7 +15,7 @@ public:
 	void Run();
 
 private:
-	sf::RenderWindow _app;
+	sf::RenderWindow* _app;
 	game::Clock _clock;
 
 };

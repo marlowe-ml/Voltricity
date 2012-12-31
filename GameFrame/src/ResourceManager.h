@@ -14,9 +14,9 @@ namespace game {
 		static void Cleanup();
 		static const sf::Font& GetFont();
 		static const sf::Image& GetImage(const std::string& fileName);
-		static sf::RenderWindow* ResourceManager::GetApp();
+		static sf::RenderWindow* GetApp();
 		
-		static const sf::Font& ResourceManager::SetFont(const std::string& fontName, unsigned int charSize = 30);
+		static const sf::Font& SetFont(const std::string& fontName, unsigned int charSize = 30);
 
 	private:
 		static sf::Font _font;

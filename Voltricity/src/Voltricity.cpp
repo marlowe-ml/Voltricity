@@ -3,13 +3,13 @@
 #include "ScreenManager.h"
 #include "ResourceManager.h"
 #include "Clock.h"
+#include <SFML/System.hpp>
 #include "VoltricityScreenFactory.h"
 
 using namespace volt;
 using namespace game;
 
 Voltricity::Voltricity()
-	:	_app(sf::RenderWindow(sf::VideoMode(800,600,32), "Voltricity"))
 {
 
 }
@@ -20,8 +20,9 @@ Voltricity::~Voltricity() {
 
 void Voltricity::Run() {
 
+	_app = new sf::RenderWindow(sf::VideoMode(800,600,32), "Voltricity");
 
-	ResourceManager::Init(_app);
+	ResourceManager::Init(*_app);
 
 	//ResourceManager::SetFont("res/Erika Ormig.ttf");
 	//ResourceManager::SetFont("Arial.ttf");
@@ -31,7 +32,7 @@ void Voltricity::Run() {
 	const int MAX_FRAME_RENDER_SKIP = 5;
 
 	VoltricityScreenFactory screenFactory;
-	ScreenManager::Init(_app, screenFactory);
+	ScreenManager::Init(*_app, screenFactory);
 	ScreenManager::ActivateScreen("Game");
 
 
@@ -42,7 +43,7 @@ void Voltricity::Run() {
 	int loops;
 	float interpolation;
 
-	while (_app.IsOpened()) {
+	while (_app->IsOpened()) {
 
 		loops = 0;
 		// check if updates should be run, allow to skip rendering for defined number of frames if updates are running behind
@@ -54,17 +55,18 @@ void Voltricity::Run() {
 
 		interpolation = (float)(_clock.GetElapsedMicroSeconds() + TICKS_BETWEEN_UPDATES - nextUpdateTick) / (float)TICKS_BETWEEN_UPDATES;
 
-		_app.Clear();
+		_app->Clear();
 		
 		ScreenManager::RenderActiveScreen();
-		if (_app.IsOpened())
-			_app.Display();
+		if (_app->IsOpened())
+			_app->Display();
 
 		// todo: sleep longer depending on frame rate
-		Sleep(1);
+		sf::Sleep(0.001);		
 
 	}
 
 	ScreenManager::Cleanup();
 
+	delete _app;
 }

@@ -6,8 +6,16 @@ Some parts of the implementation are taken from the SFML clock implementation
 http://www.sfml-dev.org
 */
 
-
-#include <windows.h>
+#ifdef WIN32
+	#include <windows.h>
+	#include <time.h>
+#else
+	#ifdef MACOS
+	    #include <mach/mach_time.h>
+	#else
+	    #include <time.h>
+	#endif
+#endif
 
 namespace game {
 
@@ -20,12 +28,13 @@ namespace game {
 		Clock();
 		ClockTick  Restart();
 		ClockTick GetElapsedMicroSeconds() const;
-		ClockTick Clock::GetSystemMicroSeconds() const;
+		ClockTick GetSystemMicroSeconds() const;
 
 	private:
 		ClockTick _startValue;
-
+		#ifdef WIN32
 		LARGE_INTEGER Clock::getFrequency() const;
+		#endif
 	};
 
 

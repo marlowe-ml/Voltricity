@@ -32,7 +32,7 @@ namespace game {
 		static bool _cleanupTerminatedScreens;
 
 		static Screen* createScreen(const std::string& screenId);
-		static void ScreenManager::cleanupTerminatedScreens();
+		static void cleanupTerminatedScreens();
 
 		
 

@@ -49,7 +49,7 @@ private:
 	void align();
 	void centerButtonsHorizontally();
 	void onSelectionChanged();
-	LabelList::iterator ButtonList::iteratorToButton(int index);
+	LabelList::iterator iteratorToButton(int index);
 
 };
 

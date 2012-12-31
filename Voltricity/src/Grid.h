@@ -21,7 +21,7 @@ public:
 	bool MoveCurrentPieceTo(int cellX, int cellY);
 	bool MoveCurrentPieceBy(int cellXDelta, int cellYDelta);
 
-	bool Grid::RotateCurrentPiece(game::Direction::e dir);
+	bool RotateCurrentPiece(game::Direction::e dir);
 
 	void AttachCurrentPieceBlocksToGrid(bool switchOnOff);
 	void HardDropCurrentPiece();
@@ -47,8 +47,8 @@ private:
 	bool isValidPositionForPiece(int cellX, int cellY, Piece& piece) const;
 	bool doMovePieceTo(int cellX, int cellY, Piece& piece);
 	void onCurrentPiecePositionOrRotationChanged(const sf::Vector2i newPos, const game::Direction::e rotationDir);
-	bool Grid::findValidPositionAfterRotation(game::Direction::e dir);
-	bool Grid::tryMoveCurrentPieceBy(int xOffset, int yOffset);
+	bool findValidPositionAfterRotation(game::Direction::e dir);
+	bool tryMoveCurrentPieceBy(int xOffset, int yOffset);
 };
 
 }

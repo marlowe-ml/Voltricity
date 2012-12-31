@@ -1,7 +1,7 @@
 #ifndef Label_h__
 #define Label_h__
 
-#include <SFMl/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "Direction.h"
 
 namespace game {

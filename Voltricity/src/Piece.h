@@ -37,7 +37,7 @@ private:
 	int _currentFrameIndex;
 	sf::Vector2f _blockSize;
 
-	void Piece::keepValidFrameIndex();
+	void keepValidFrameIndex();
 
 	PieceType::e _pieceType;
 
