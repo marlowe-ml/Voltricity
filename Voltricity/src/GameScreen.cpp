@@ -36,6 +36,23 @@ void GameScreen::handleEvent(const sf::Event& e) {
 			if (_mainMenu.CheckWasClosed()) {
 				_gameMechanics.ResumeGame(_activeScreenTime);
 			}
+
+			switch (_mainMenu.CheckLastActivatedButton()) {
+				case MainMenu::btnNewGame:
+					_gameMechanics.StartNewGame(_activeScreenTime);
+					break;
+				case MainMenu::btnResumeGame:
+					_gameMechanics.ResumeGame(_activeScreenTime);
+					break;
+				case MainMenu::btnAbout:
+					//ScreenManager::activateScreen("About");
+					break;
+				case MainMenu::btnExit:
+					//ResourceManager::getApp()->Close();
+					break;
+			}
+
+
 			return;
 		}
 
