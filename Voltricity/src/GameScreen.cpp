@@ -45,10 +45,10 @@ void GameScreen::handleEvent(const sf::Event& e) {
 					_gameMechanics.ResumeGame(_activeScreenTime);
 					break;
 				case MainMenu::btnAbout:
-					//ScreenManager::activateScreen("About");
+					game::ScreenManager::ActivateScreen("About");
 					break;
 				case MainMenu::btnExit:
-					//ResourceManager::getApp()->Close();
+					game::ResourceManager::GetApp()->Close();
 					break;
 			}
 
@@ -114,13 +114,8 @@ void GameScreen::handleEvent(const sf::Event& e) {
 }
 
 void GameScreen::update() {
-	sf::Event e;
-	while(nextEvent(e))
-		handleEvent(e);
-	
 	if (!_gameMechanics.IsPaused())
 		_gameMechanics.AdvanceGame(_activeScreenTime);
-
 }
 
 

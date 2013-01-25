@@ -31,8 +31,11 @@ int Screen::Run(unsigned long long newAppTime) {
 	_activeScreenTimePrev = _activeScreenTime;
 	_activeScreenTime += _appTime - _appTimePrev;
 
+	sf::Event e;
+	while(nextEvent(e))
+		handleEvent(e);
+
 	update();
-	
 
 	return EXIT_SUCCESS;
 }
@@ -57,8 +60,6 @@ void Screen::onCloseEvent() {
 
 void Screen::Render() {
 	present();
-
-	// todo: after render need to adjust last update time?
 }
 
 int Screen::Init(sf::RenderWindow& app) {
