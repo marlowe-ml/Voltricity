@@ -7,8 +7,8 @@ Block::Block(const sf::Color color, float width, float height)
 {
 	SetPosition(0,0);
 	SetColor(color);
-}
-
+} 
+ 
 void Block::SetSize(sf::Vector2f size) {
 	_width = size.x;
 	_height = size.y;
@@ -22,9 +22,7 @@ void Block::SetEmpty(bool val) {
 	_empty = val;
 }
 
-void Block::Render(sf::RenderTarget& target) const {
-	sf::Vector2f pos = GetPosition();
-	
+void Block::Render(sf::RenderTarget& target) const {	
 	float x1 = 0;
 	float y1 = 0;
 	float x2 = x1 + _width;

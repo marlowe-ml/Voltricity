@@ -1,6 +1,6 @@
 #include "MainMenu.h"
 #include "Layout.h"
-#include "ScreenManager.h"
+#include "ScreenManager.h" 
 #include "ResourceManager.h"
 
 using namespace volt;
@@ -11,7 +11,8 @@ MainMenu::MainMenu() : _wasClosed(false), _initialMenu(true) {
 	_buttonList.addButton("About", MainMenu::btnAbout);
 	_buttonList.addButton("Exit", MainMenu::btnExit);
 	_buttonList.selectFirstButton();
-
+ 
+	
 	// todo:
 	// -- _logoSprite.SetImage(game::ResourceManager::GetImage("logo.png"));
 }
@@ -41,21 +42,23 @@ void MainMenu::Render(sf::RenderTarget& target) const {
 void MainMenu::HandleEvent(const sf::Event& e) {
 	if (e.Type == sf::Event::KeyPressed) {
 		switch(e.Key.Code) {
-		case sf::Key::Up:
-			_buttonList.selectPreviousButton();
-			break;
-		case sf::Key::Down:
-			_buttonList.selectNextButton();
-			break;
-		case sf::Key::Return:
-		case sf::Key::Space:
-			activateSelectedButton();
-			break;
-		case sf::Key::Escape:
-			if (!_initialMenu) {
-				_wasClosed = true;
-			}
-			break;
+			case sf::Key::Up:
+				_buttonList.selectPreviousButton();
+				break;
+			case sf::Key::Down:
+				_buttonList.selectNextButton();
+				break;
+			case sf::Key::Return:
+			case sf::Key::Space:
+				activateSelectedButton();
+				break;
+			case sf::Key::Escape:
+				if (!_initialMenu) {
+					_wasClosed = true;
+				}
+				break;
+			default:
+				break;
 		}		
 	}
 }
