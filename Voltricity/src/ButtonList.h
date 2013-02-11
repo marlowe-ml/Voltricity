@@ -24,6 +24,9 @@ public:
 
 typedef std::list<MenuButton> LabelList;
 
+// todo: buttonlist could be part of the Game framework
+// rendering and layout of the buttonlist could be overridden in sub-classes
+
 class ButtonList : public sf::Drawable {
 
 public:

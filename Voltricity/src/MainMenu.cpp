@@ -4,6 +4,11 @@
 #include "ResourceManager.h"
 
 using namespace volt;
+// todo: main menu class could be more high-level (e.g. hide implementation detail _buttonList
+// consider making this a base class in the Game framework, then derive and override for the given game
+// consider using key mappings for all menu actions - menu behavior remains the same, only content and key mappings are variable
+
+// todo: avoid enum for buttons, use strings only
 
 MainMenu::MainMenu() : _wasClosed(false), _initialMenu(true) {
 	_buttonList.addButton("New Game", MainMenu::btnNewGame);
