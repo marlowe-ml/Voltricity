@@ -55,6 +55,7 @@ void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 
 	_isPaused = false;
 	_timeAccumultor.Reset();
+	_automaticDropMove.SetDelayBetweenMoves(FULL_DROP_INTERVAL);
 	
 	int maxPieces = _pieceQueue.GetMaxPieces();
 	for (int i=0; i<maxPieces; i++) {
