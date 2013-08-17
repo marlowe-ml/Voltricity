@@ -19,6 +19,10 @@ void GameScreen::NextPieceSpawned(const Piece& nextPiece) {
 
 }
 
+void GameScreen::GameOver() {
+
+}
+
 GameScreen::GameScreen() 
 : _gameMechanics()
 {
@@ -29,7 +33,10 @@ GameScreen::GameScreen()
 void GameScreen::handleEvent(const sf::Event& e) {
 	if (e.Type == sf::Event::KeyPressed) {
 		
-		if (_gameMechanics.IsPaused()) {
+		if (_gameMechanics.IsGameOver()) {
+			// todo: move to enter high score
+			return;
+		} else if (_gameMechanics.IsPaused()) {
 
 			_mainMenu.HandleEvent(e);
 
@@ -114,7 +121,7 @@ void GameScreen::handleEvent(const sf::Event& e) {
 }
 
 void GameScreen::update() {
-	if (!_gameMechanics.IsPaused())
+	if (!_gameMechanics.IsPaused() && !_gameMechanics.IsGameOver())
 		_gameMechanics.AdvanceGame(_activeScreenTime);
 }
 
@@ -132,9 +139,14 @@ void GameScreen::present() {
 	_app->Draw(_gameMechanics.GetHoldPieceQueue());
 
 
+	if (_gameMechanics.IsGameOver()) {
+		_app->Draw(_labelGameOver);
+	}
+
 	if (_gameMechanics.IsPaused()) {
 		_app->Draw(_mainMenu);
 	}
+
 
 
 
@@ -180,4 +192,7 @@ void GameScreen::alignLabels() {
 
 	_labelNext = game::Label(sf::String("Next", game::ResourceManager::GetFont(), 20));
 	_labelNext.SetPosition(grid.GetPosition().x - _labelNext.GetSize().x - 10, grid.GetPosition().y);
+
+	_labelGameOver = game::Label(sf::String("Game Over.", game::ResourceManager::GetFont(), 20));
+	game::ScreenManager::GetLayout().AlignDrawable(_labelGameOver, _labelGameOver.GetSize(), game::Direction::center);
 }

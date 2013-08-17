@@ -36,6 +36,7 @@ public:
 	PieceQueue& GetHoldPieceQueue();
 
 	bool IsPaused() const;
+	bool IsGameOver() const;
 
 private:
 	void spawnSpecificPiece(PieceType::e pieceType);
@@ -70,6 +71,7 @@ private:
 	int _score;
 
 	bool _isPaused;
+	bool _isGameOver;
 
 	IGameEventListener* _gameEventListener;
 	

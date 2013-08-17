@@ -15,7 +15,7 @@ _automaticDropMove(game::Direction::bottom, FULL_DROP_INTERVAL),
 _manualDropMove(game::Direction::bottom, game::ClockSecond(0.075)),
 _horizontalMove(game::Direction::none, game::ClockSecond(0.08)),
 _rotationMove(game::Direction::none, game::ClockSecond(0.15)),
-_allowHardDrop(true), _holdPieceInUse(false), _gameEventListener(NULL), _isPaused(false)
+_allowHardDrop(true), _holdPieceInUse(false), _gameEventListener(NULL), _isPaused(false), _isGameOver(false)
 {
 }
 
@@ -54,6 +54,7 @@ void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {
 	_rowsToNextLevel = ROWS_PER_LEVEL;
 
 	_isPaused = false;
+	_isGameOver = false;
 	_timeAccumultor.Reset();
 	_automaticDropMove.SetDelayBetweenMoves(FULL_DROP_INTERVAL);
 	
@@ -117,6 +118,10 @@ void GameMechanics::ResumeGame(game::ClockTick activeScreenTime) {
 
 bool GameMechanics::IsPaused() const {
 	return _isPaused;
+}
+
+bool GameMechanics::IsGameOver() const {
+	return _isGameOver;
 }
 
 
@@ -258,10 +263,14 @@ void GameMechanics::spawnSpecificPiece(PieceType::e pieceType) {
 	nextPiece.SetPosition(sf::Vector2f(0,0));
 
 	_grid.SetCurrentPiece(nextPiece);
-	_grid.MoveCurrentPieceTo(0,0);
+	if (_grid.MoveCurrentPieceTo(3,0)) {
+		_gameEventListener->NextPieceSpawned(nextPiece);
+	} else {
+		_isGameOver = true;
+		_gameEventListener->GameOver();
+		std::cout << "game over";
+	}
 	_automaticDropMove.Stop();
-
-	_gameEventListener->NextPieceSpawned(nextPiece);
 }
 
 void GameMechanics::spawnNextPieceFromQueue() {
