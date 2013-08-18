@@ -194,5 +194,7 @@ void GameScreen::alignLabels() {
 	_labelNext.SetPosition(grid.GetPosition().x - _labelNext.GetSize().x - 10, grid.GetPosition().y);
 
 	_labelGameOver = game::Label(sf::String("Game Over.", game::ResourceManager::GetFont(), 20));
+	_labelGameOver.SetBorder(1.0, sf::Color::Red);
+	_labelGameOver.SetBackground(sf::Color::Black);
 	game::ScreenManager::GetLayout().AlignDrawable(_labelGameOver, _labelGameOver.GetSize(), game::Direction::center);
 }
