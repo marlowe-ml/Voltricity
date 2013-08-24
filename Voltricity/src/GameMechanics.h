@@ -37,6 +37,7 @@ public:
 
 	bool IsPaused() const;
 	bool IsGameOver() const;
+	bool IsRunning() const;
 
 private:
 	void spawnSpecificPiece(PieceType::e pieceType);

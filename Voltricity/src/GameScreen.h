@@ -45,8 +45,10 @@ private:
 	sf::Vector2f _holdPiecePos;
 
 	MainMenu _mainMenu;
+	bool _showMenu;
 
 	void alignLabels();
+	void openMenu();
 };
 
 

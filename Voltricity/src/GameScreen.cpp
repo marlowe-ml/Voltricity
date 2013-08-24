@@ -7,6 +7,14 @@
 
 using namespace volt;
 
+GameScreen::GameScreen() 
+	: _gameMechanics(), _showMenu(false)
+{
+	_gameMechanics.SetGameEventListener(this);
+	_mainMenu.SetInGame(true);
+}
+
+
 void GameScreen::LevelChanged(int oldLevel, int newLevel) {
 	_labelLevelDigits.SetText(game::Utils::IntToStr(newLevel));
 }
@@ -23,38 +31,36 @@ void GameScreen::GameOver() {
 
 }
 
-GameScreen::GameScreen() 
-: _gameMechanics()
-{
-	_gameMechanics.SetGameEventListener(this);
-	_mainMenu.SetInGame(true);
-}
 
 void GameScreen::handleEvent(const sf::Event& e) {
 	if (e.Type == sf::Event::KeyPressed) {
 		
-		if (_gameMechanics.IsGameOver()) {
-			// todo: move to enter high score
-			return;
-		} else if (_gameMechanics.IsPaused()) {
+		if (_showMenu) {
 
 			_mainMenu.HandleEvent(e);
 
 			if (_mainMenu.CheckWasClosed()) {
-				_gameMechanics.ResumeGame(_activeScreenTime);
+				if (!_gameMechanics.IsGameOver())
+					_gameMechanics.ResumeGame(_activeScreenTime);
+
+				_showMenu = false;
+				return;
 			}
 
 			switch (_mainMenu.CheckLastActivatedButton()) {
 				case MainMenu::btnNewGame:
 					_gameMechanics.StartNewGame(_activeScreenTime);
+					_showMenu = false;
 					break;
 				case MainMenu::btnResumeGame:
 					_gameMechanics.ResumeGame(_activeScreenTime);
+					_showMenu = false;
 					break;
 				case MainMenu::btnAbout:
 					game::ScreenManager::ActivateScreen("About");
 					break;
 				case MainMenu::btnExit:
+					_showMenu = false;
 					game::ResourceManager::GetApp()->Close();
 					break;
 			}
@@ -62,6 +68,20 @@ void GameScreen::handleEvent(const sf::Event& e) {
 
 			return;
 		}
+
+
+		if (_gameMechanics.IsGameOver()) {
+			// todo: move to enter high score
+			switch(e.Key.Code) {
+				case sf::Key::Escape:
+					openMenu();
+					break;
+
+			}
+			
+			return;
+		}
+
 
 		switch(e.Key.Code) {
 			case sf::Key::Left:
@@ -83,9 +103,7 @@ void GameScreen::handleEvent(const sf::Event& e) {
 				_gameMechanics.ProcessHardDropCommand();
 				break;
 			case sf::Key::Escape:
-				_gameMechanics.PauseGame(_activeScreenTime);
-				_mainMenu.SelectFirst();
-				_mainMenu.SetInGame(true);	// todo: define and use profiles to determine button sets
+				openMenu();
 				break;
 
 		}
@@ -121,7 +139,7 @@ void GameScreen::handleEvent(const sf::Event& e) {
 }
 
 void GameScreen::update() {
-	if (!_gameMechanics.IsPaused() && !_gameMechanics.IsGameOver())
+	if (_gameMechanics.IsRunning())
 		_gameMechanics.AdvanceGame(_activeScreenTime);
 }
 
@@ -139,13 +157,12 @@ void GameScreen::present() {
 	_app->Draw(_gameMechanics.GetHoldPieceQueue());
 
 
-	if (_gameMechanics.IsGameOver()) {
+	if (_showMenu) {
+		_app->Draw(_mainMenu);
+	} else 	if (_gameMechanics.IsGameOver()) {
 		_app->Draw(_labelGameOver);
 	}
 
-	if (_gameMechanics.IsPaused()) {
-		_app->Draw(_mainMenu);
-	}
 
 
 
@@ -197,4 +214,14 @@ void GameScreen::alignLabels() {
 	_labelGameOver.SetBorder(1.0, sf::Color::Red);
 	_labelGameOver.SetBackground(sf::Color::Black);
 	game::ScreenManager::GetLayout().AlignDrawable(_labelGameOver, _labelGameOver.GetSize(), game::Direction::center);
+}
+
+void GameScreen::openMenu() {
+	bool inGame = _gameMechanics.IsRunning();
+	if (inGame)
+		_gameMechanics.PauseGame(_activeScreenTime);
+				
+	_mainMenu.SelectFirst();
+	_mainMenu.SetInGame(inGame);
+	_showMenu = true;
 }

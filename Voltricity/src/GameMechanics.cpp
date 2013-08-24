@@ -124,6 +124,11 @@ bool GameMechanics::IsGameOver() const {
 	return _isGameOver;
 }
 
+bool GameMechanics::IsRunning() const {
+	return !_isPaused && !_isGameOver;
+}
+
+
 
 void GameMechanics::ProcessMoveCommand(game::Direction::e direction) {
 	if (_isPaused)
