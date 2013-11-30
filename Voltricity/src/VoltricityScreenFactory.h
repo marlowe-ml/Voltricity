@@ -5,6 +5,7 @@
 #include "ScreenFactory.h"
 #include "GameScreen.h"
 #include "AboutScreen.h"
+#include "HighscoreScreen.h"
 
 namespace volt {
 
@@ -18,6 +19,10 @@ namespace volt {
 
 			if (screenId == "About")
 				return new AboutScreen();
+
+			if (screenId == "Highscore")
+				return new HighscoreScreen();
+
 
 
 			return NULL;

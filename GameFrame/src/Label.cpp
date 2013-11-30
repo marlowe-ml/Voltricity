@@ -8,13 +8,22 @@ Label::Label(const sf::String& text)
 	: _bgColor(sf::Color(0,0,0,0)), _borderColor(sf::Color(0,0,0,0)), _borderSize(0)
 {
 	_text = text;
-	sf::FloatRect rect = _text.GetRect();
-	_width = rect.Right - rect.Left;
-	_height = rect.Bottom - rect.Top;
+	fitText();
 }
 
 void Label::SetText(const std::string& text) {
 	_text.SetText(text);
+	fitText();
+}
+
+void Label::SetTextWithoutFit(const std::string& text) {
+	_text.SetText(text);
+}
+
+void Label::fitText() {
+	sf::FloatRect rect = _text.GetRect();
+	_width = rect.Right - rect.Left;
+	_height = rect.Bottom - rect.Top;
 }
 
 void Label::Render(sf::RenderTarget& target) const {

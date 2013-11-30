@@ -28,7 +28,12 @@ void GameScreen::NextPieceSpawned(const Piece& nextPiece) {
 }
 
 void GameScreen::GameOver() {
-
+	// get score
+	// display score
+	// read existing scores
+	// is new high score (top 10)?
+		// allow enter name (max 16 chars)
+		// store score
 }
 
 
@@ -72,12 +77,16 @@ void GameScreen::handleEvent(const sf::Event& e) {
 
 		if (_gameMechanics.IsGameOver()) {
 			// todo: move to enter high score
+			
+			game::ScreenManager::ActivateScreen("Highscore");
+
+			/*
 			switch(e.Key.Code) {
 				case sf::Key::Escape:
 					openMenu();
 					break;
 
-			}
+			}*/
 			
 			return;
 		}
@@ -210,7 +219,7 @@ void GameScreen::alignLabels() {
 	_labelNext = game::Label(sf::String("Next", game::ResourceManager::GetFont(), 20));
 	_labelNext.SetPosition(grid.GetPosition().x - _labelNext.GetSize().x - 10, grid.GetPosition().y);
 
-	_labelGameOver = game::Label(sf::String("Game Over.", game::ResourceManager::GetFont(), 20));
+	_labelGameOver = game::Label(sf::String("Game Over. Press Any Key.", game::ResourceManager::GetFont(), 20));
 	_labelGameOver.SetBorder(1.0, sf::Color::Red);
 	_labelGameOver.SetBackground(sf::Color::Black);
 	game::ScreenManager::GetLayout().AlignDrawable(_labelGameOver, _labelGameOver.GetSize(), game::Direction::center);

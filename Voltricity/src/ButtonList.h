@@ -40,6 +40,7 @@ public:
 
 	virtual void Render(sf::RenderTarget& target) const;
 	sf::FloatRect GetRect() const;
+	sf::Vector2f GetSize() const;
 
 private:
 	LabelList _buttons;

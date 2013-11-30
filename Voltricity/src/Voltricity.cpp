@@ -62,7 +62,7 @@ void Voltricity::Run() {
 			_app->Display();
 
 		// todo: sleep longer depending on frame rate
-		sf::Sleep(0.001);		
+		sf::Sleep(0.001f);		
 
 	}
 

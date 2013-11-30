@@ -1,6 +1,8 @@
 #ifndef Highscore_h__
 #define Highscore_h__
 
+#include <string>
+
 class Highscore {
 	public:
 

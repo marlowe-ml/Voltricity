@@ -115,6 +115,10 @@ sf::FloatRect ButtonList::GetRect() const {
 	return sf::FloatRect(0, 0, _width, _height);
 }
 
+sf::Vector2f ButtonList::GetSize() const {
+	return sf::Vector2f(_width, _height);
+}
+
 void ButtonList::align() {
 	float currentHeight = 0;
 	float currentWidth = 0;
