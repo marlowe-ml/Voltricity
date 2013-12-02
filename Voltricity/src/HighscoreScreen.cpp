@@ -1,5 +1,6 @@
 #include "HighscoreScreen.h"
 #include "ScreenManager.h"
+#include "GlobalState.h"
 
 using namespace volt;
 
@@ -30,6 +31,12 @@ void HighscoreScreen::present() {
 
 int HighscoreScreen::onInit() {
 	// todo: read scores
+
+	if (GlobalState::HighscoreEntryPending) {
+		// todo: check if an actual highscore was reached --> maybe store the score in global state
+		_isEnteringScore = true;
+		GlobalState::HighscoreEntryPending = false;
+	}
 
 	//_highscoreInputField.SetText("TEST");
 	_highscoreInputField.SetBorder(1.0f, sf::Color::Red);

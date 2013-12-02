@@ -4,6 +4,7 @@
 #include "GameSettings.h"
 #include "Layout.h"
 #include "Utils.h"
+#include "GlobalState.h"
 
 using namespace volt;
 
@@ -77,7 +78,7 @@ void GameScreen::handleEvent(const sf::Event& e) {
 
 		if (_gameMechanics.IsGameOver()) {
 			// todo: move to enter high score
-			
+			GlobalState::HighscoreEntryPending = true;	// todo: store actual score
 			game::ScreenManager::ActivateScreen("Highscore");
 
 			/*
