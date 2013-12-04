@@ -40,6 +40,9 @@ int GameMechanics::GetLevel() const {
 	return _level;
 }
 
+int GameMechanics::GetScore() const {
+	return _score;
+}
 
 
 void GameMechanics::StartNewGame(game::ClockTick activeScreenTime) {

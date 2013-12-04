@@ -24,6 +24,7 @@ protected:
 private:
 	ButtonList _buttonList;
 	game::InputField _highscoreInputField;
+	game::Label _highscoreEntryLabel;
 	bool _isEnteringScore;
 
 };

@@ -5,7 +5,7 @@ namespace volt {
 
 class GlobalState {
 public:
-	static bool HighscoreEntryPending;
+	static int PendingHighscoreForEntry;
 
 };
 

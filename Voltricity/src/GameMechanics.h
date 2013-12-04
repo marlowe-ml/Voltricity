@@ -31,6 +31,7 @@ public:
 	void ProcessHoldPieceSwapCommand_Release();
 
 	int GetLevel() const;
+	int GetScore() const;
 	Grid& GetGrid();
 	PieceQueue& GetPieceQueue();
 	PieceQueue& GetHoldPieceQueue();

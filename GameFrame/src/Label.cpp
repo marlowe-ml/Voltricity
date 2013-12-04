@@ -11,6 +11,14 @@ Label::Label(const sf::String& text)
 	fitText();
 }
 
+
+void Label::SetText(const sf::String& text) {
+	_text = text;
+	fitText();
+}
+
+
+
 void Label::SetText(const std::string& text) {
 	_text.SetText(text);
 	fitText();

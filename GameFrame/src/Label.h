@@ -14,6 +14,7 @@ public:
 	void Render(sf::RenderTarget& target) const;
 	const sf::Vector2f GetSize() const;
 	void SetText(const std::string& text);
+	void SetText(const sf::String& text);
 	void SetTextWithoutFit(const std::string& text);
 	void SetBorder(float borderSize, sf::Color color);
 	void SetBackground(sf::Color color);
