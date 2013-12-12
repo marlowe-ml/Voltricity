@@ -2,17 +2,24 @@
 #include "ScreenManager.h"
 #include "ResourceManager.h"
 #include "GlobalState.h"
-#include <sstream>  
+#include "Highscore.h"
+#include <sstream> 
 
 using namespace volt;
 
-HighscoreScreen::HighscoreScreen() : _isEnteringScore(false), _highscoreInputField(10) {
+HighscoreScreen::HighscoreScreen() : _isEnteringScore(false), _highscoreInputField(16) {
 	_highscoreInputField.SetBorder(1.0f, sf::Color::Red);
 }
 
 void HighscoreScreen::handleEvent(const sf::Event& e) {
 	if (_isEnteringScore || true) {
 		_highscoreInputField.HandleEvent(e);
+		if (_highscoreInputField.TextWasConfirmed())
+		{
+			std::string hsName = _highscoreInputField.GetText();
+			Highscore hs = Highscore(GlobalState::PendingHighscoreForEntry, hsName);
+			// todo: serialize, textual format?
+		}
 	}
 }
 
@@ -34,8 +41,38 @@ void HighscoreScreen::present() {
 }
 
 
+#include <stdio.h>  /* defines FILENAME_MAX */
+    #include <direct.h>
+    #define GetCurrentDir _getcwd
+
+
+
 int HighscoreScreen::onInit() {
 	// todo: read scores
+
+ char cCurrentPath[FILENAME_MAX];
+
+ if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
+     {
+     return errno;
+     }
+
+cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
+
+printf ("The current working directory is %s", cCurrentPath);
+
+
+	std::ifstream myfile ("Highscores.txt");
+
+	bool isOpen = myfile.is_open();
+
+	if (isOpen)
+		std::cout << "file open" << std::endl;
+	else
+		std::cout << "file NOT open" << std::endl;
+
+	Highscore hs(0, "");
+	myfile >> hs;
 
 	// todo: populate scores
 	_buttonList.addButton("Marlowe - 10000", 0);

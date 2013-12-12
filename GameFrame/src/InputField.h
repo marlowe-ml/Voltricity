@@ -10,8 +10,10 @@ public:
 	InputField(int maxLength);
 	std::string GetText();
 	void HandleEvent(const sf::Event& e);
+	bool TextWasConfirmed() const;
 private:
 	int _maxLength;
+	bool _textWasConfirmed;
 };
 
 }
