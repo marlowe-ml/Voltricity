@@ -12,13 +12,14 @@ HighscoreScreen::HighscoreScreen() : _isEnteringScore(false), _highscoreInputFie
 }
 
 void HighscoreScreen::handleEvent(const sf::Event& e) {
-	if (_isEnteringScore || true) {
+	if (_isEnteringScore) {
 		_highscoreInputField.HandleEvent(e);
 		if (_highscoreInputField.TextWasConfirmed())
 		{
 			std::string hsName = _highscoreInputField.GetText();
 			Highscore hs = Highscore(GlobalState::PendingHighscoreForEntry, hsName);
 			// todo: serialize, textual format?
+			// .. hs.Serialize()
 		}
 	}
 }
